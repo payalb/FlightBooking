@@ -42,30 +42,87 @@ jQuery.validator.setDefaults({
 	errorElement: 'span',
 	errorClass: "badge badge-warning"
 });
+
+
+
+    // ($element).data(name,data)
+
+
+    	$('form').validate({
+    		highlight: function(element) {
+    	        $(element).removeClass("badge badge-warning");
+    	    },
+    		rules : {
+    			deptCity : {
+    				required : true,
+    				minlength : 2,
+    			},
+    			arrCity : {
+    				required : true,
+    				minlength : 2
+    			},
+    		
+    			arrDate :{
+    				dateCompare : ['deptDate', 'deptTime', 'arrDate', 'arrTime']
+    				
+    			}
+    		},
+    	    
+    	    submitHandler:function(form){
+    	    	form.submit();
+
+    	        
+    	    }
+    	    
+    	    
+    	    
+    	});
+
 $.validator.addMethod('dateCompare', function(value, element, params) {
     var field_1 = $('input[name="' + params[0] + '"]').val(),
         field_2 = $('input[name="' + params[1] + '"]').val(),
         field_3 = $('input[name="' + params[2] + '"]').val(),
         field_4 = $('input[name="' + params[3] + '"]').val(),
+        today = new Date();
+        arr_date = new Date(field_3)
+    	dept_date = new Date(field_1);
         arr = new Date(field_3+'T'+field_4)
     	dept = new Date(field_1+'T'+field_2);
-    return arr - dept > 0;
-}, "Arrival time is not valid");
-$('form').validate({
-	highlight: function(element) {
-        $(element).removeClass("badge badge-warning");
-    },
-	rules : {
-		deptCity : {
-			required : true,
-			minlength : 2
-		},
-		arrCity : {
-			required : true,
-			minlength : 2
-		},
-		arrDate : {
-			dateCompare : ['deptDate', 'deptTime', 'arrDate', 'arrTime']
-		}
-	}
-});
+        
+        if (field_1.length == 0){
+        	$(element).data('error-msg',"Please input departure date");
+        	return false;
+        }
+        if (field_2.length==0){
+        	$(element).data('error-msg',"Please input departure time");
+        	return false;
+        }
+        if (field_3.length==0){
+        	$(element).data('error-msg',"Please input Arrival Date");
+        	return false;
+        }
+        if (field_4.length==0){
+        	$(element).data('error-msg',"Please input Arrival time");
+        	return false;
+        }   
+        if(dept_date.getTime()>today){
+    	if(arr_date>= dept_date){
+    		return arr - dept > 0;
+    		 
+    	}else{
+    		return false;
+    	}
+    	
+    }
+},function(params, element) {
+    return $(element).data('error-msg');
+},"Invalid Date and Time");
+
+
+
+
+
+
+
+
+
