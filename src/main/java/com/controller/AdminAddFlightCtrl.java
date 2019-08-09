@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Map.Entry;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -34,16 +35,21 @@ public class AdminAddFlightCtrl extends HttpServlet {
 
 		try {
 			String deptCity = request.getParameter("deptCity");
+			System.out.println(deptCity+" "+request.getParameter("deptCity"));
 			String arrCity = request.getParameter("arrCity");
+			System.out.println(arrCity+" "+request.getParameter("arrCity"));
 			Integer	airplaneId = FormatUtil.strToInteger(request.getParameter("airplaneId"));
+			System.out.println(airplaneId+" "+request.getParameter("airplaneId"));
 			Integer	firstCap = FormatUtil.strToInteger(request.getParameter("firstCap"));
 			Integer	businessCap = FormatUtil.strToInteger(request.getParameter("businessCap"));
 			Integer	economyCap = FormatUtil.strToInteger(request.getParameter("economyCap"));
 			LocalDate deptDate = FormatUtil.strToLocalDate(request.getParameter("deptDate"));
+			System.out.println(deptDate+" "+request.getParameter("deptDate"));
 			LocalTime deptTime = FormatUtil.strToLocalTime(request.getParameter("deptTime"));
 			LocalDate arrDate = FormatUtil.strToLocalDate(request.getParameter("arrDate"));
 			LocalTime arrTime = FormatUtil.strToLocalTime(request.getParameter("arrTime"));
 			
+
 			if (deptCity != null && arrCity != null && airplaneId != null && firstCap != null 
 					&& businessCap != null && economyCap != null && deptDate != null 
 					&& deptTime != null && arrDate != null && arrTime != null) {
@@ -70,6 +76,7 @@ public class AdminAddFlightCtrl extends HttpServlet {
 				throw new InputException("Invalid input information in adding flight.");
 			}
 		} catch (DatabaseException | InputException | FileException e) {
+			e.printStackTrace();
 			response.sendRedirect(request.getContextPath() + "/admin_error?exception=" + e.getMessage());
 		}
 	}

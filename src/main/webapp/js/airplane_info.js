@@ -47,10 +47,20 @@ $.validator.addMethod('dateCompare', function(value, element, params) {
         field_2 = $('input[name="' + params[1] + '"]').val(),
         field_3 = $('input[name="' + params[2] + '"]').val(),
         field_4 = $('input[name="' + params[3] + '"]').val(),
-        arr = new Date(field_3+'T'+field_4)
+        arr = new Date(field_3+'T'+field_4),
     	dept = new Date(field_1+'T'+field_2);
-    return arr - dept > 0;
-}, "Arrival time is not valid");
+    if (field_1.length==0 || field_2.length==0){
+    	$(element).data('error-msg',"Please input departure date and time.");
+    	return false;
+    }
+    else{
+    	$(element).data('error-msg',"Invalid arrive time.");
+    	return arr - dept >= 0;
+    }
+}, function(params, element) {
+    return $(element).data('error-msg');
+});
+
 $('form').validate({
 	highlight: function(element) {
         $(element).removeClass("badge badge-warning");
@@ -64,8 +74,25 @@ $('form').validate({
 			required : true,
 			minlength : 2
 		},
-		arrDate : {
+		deptDate :{
+			required : true
+		},
+		deptTime :{
+			required : true
+		},		
+		arrTime :{
+			required : true,
+			dateCompare : ['deptDate', 'deptTime', 'arrDate', 'arrTime']
+		},
+		arrDate :{
+			required : true,
 			dateCompare : ['deptDate', 'deptTime', 'arrDate', 'arrTime']
 		}
+
+	},
+	submitHandler:function(form)
+	{
+		form.submit();
 	}
+    
 });

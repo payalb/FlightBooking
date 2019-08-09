@@ -63,6 +63,7 @@
 			<artifactId>powermock-api-mockito</artifactId>
 			<version>1.7.4</version>
 			<scope>test</scope>
+			
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.flywaydb/flyway-core -->
