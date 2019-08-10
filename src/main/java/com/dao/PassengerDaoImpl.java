@@ -62,10 +62,10 @@ public class PassengerDaoImpl implements PassengerDao{
 
 	@Override
 	public Passenger passengerRegister(Passenger passenger) throws DatabaseException, FileException {
-		ResultSet set = null;
+		ResultSet set = null;		
 		String updateSql = "insert into passenger(passenger_id, email, password, firstname, lastname, gender) values("
-				+ "passenger_seq.nextval, ?, ?, ?, ?, ?)";
-		String querySql = "select passenger_seq.currval as id from dual";
+				+ "nextval('passenger_seq'), ?, ?, ?, ?, ?)";
+		String querySql = "select currval('passenger_seq') as id";
 		try (Connection conn = DatabaseUtil.getConnection(); 
 				PreparedStatement updatePs = conn.prepareStatement(updateSql);
 				PreparedStatement queryPs = conn.prepareStatement(querySql);) {
@@ -84,8 +84,11 @@ public class PassengerDaoImpl implements PassengerDao{
 			}
 			if (set != null)
 				set.close();
+			
 			conn.commit();
 		} catch (SQLException e) {
+			//System.out.println("IS HERE!");
+			//e.printStackTrace();
 			throw new DatabaseException("Unable to register passenger: " + e.getMessage());
 		}
 		return passenger;
