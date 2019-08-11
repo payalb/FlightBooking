@@ -23,9 +23,16 @@ public class AdminManagementFilter implements Filter {
 		HttpServletResponse res = (HttpServletResponse) response;
 		HttpSession session = req.getSession(false);
 		if (session == null || session.getAttribute("adminName") == null) {
+			System.out.println("P1");
 			res.sendRedirect(req.getContextPath() + "/admin");
 		}
+
+		try {
 		chain.doFilter(request, response);
+		}
+		catch (Exception e){
+			System.out.println(e.getMessage());
+		}
 	}
 
 	@Override

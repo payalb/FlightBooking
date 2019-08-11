@@ -20,25 +20,30 @@ import com.util.EnumUtil;
 @WebServlet("/passenger-register")
 public class RegisterCtrl extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
 	PassengerDao passengerDao = new PassengerDaoImpl();
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
+		
 		String firstName = request.getParameter("firstname");
 		String lastName = request.getParameter("lastname");
 		String email = request.getParameter("email");
 		String password = request.getParameter("pass_confirmation");
 		Gender gender = EnumUtil.stringToGender(request.getParameter("gender"));
-
+		
 		try {
 			if (firstName == null || lastName == null || email == null || password == null || gender == null) {
 				throw new InputException("Invalid input information during registration.");
 			}
+			System.out.println("YO!YO!3");
 			Passenger passenger = new Passenger(password, firstName, lastName, email, gender);
 			passenger = passengerDao.passengerRegister(passenger);
 			HttpSession session = request.getSession(true);
+			System.out.println(passenger.getPassengerId());
+			System.out.println(passenger.getEmail());
 			session.setAttribute("passengerId", passenger.getPassengerId());
+			System.out.println("BEFORE HERE!");
 			session.setAttribute("passengerEmail", passenger.getEmail());
 			response.sendRedirect(request.getContextPath() + "/");
 

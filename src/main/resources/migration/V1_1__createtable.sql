@@ -94,3 +94,4 @@ create table booking(
 drop sequence if exists Flight_seq;
 drop sequence if exists Booking_seq;
 drop sequence if exists passenger_seq;
+drop sequence if exists admin_seq;

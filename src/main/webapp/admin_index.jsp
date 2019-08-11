@@ -74,16 +74,20 @@
 				          		<tbody>
 			          				<c:forEach items="${flightList}" var="flight">
 										<tr>
-											<td>${flight.getFlightId()}</td>
-											<td>${flight.getDepartureCity()}</td>
-											<td>${flight.getArrivalCity()}</td>
-											<td>${flight.getDepartureTime()}</td>
-											<td>${flight.getArrivalTime()}</td>
+											<td>${flight.key。getFlightId()}</td>
+											<td>${flight.key.getDepartureCity()}</td>
+											<td>${flight.key.getArrivalCity()}</td>
+											<td>${flight.key.getDepartureTime()}</td>
+											<td>${flight.key.getArrivalTime()}</td>
 											<c:if test="${sessionScope.adminName!=null}">
 												<td>
-													<a href="adminflightinfo?flightId=${flight.getFlightId()}">Edit</a>
+													<c:if test="${flight.value}">
+														<a href="flightinfo?flightId=${flight.key.getFlightId()}">Book</a>
+														&nbsp;&nbsp;&nbsp;&nbsp;
+													</c:if>
+													<a href="adminflightinfo?flightId=${flight.key.getFlightId()}">Edit</a>
 													&nbsp;&nbsp;&nbsp;&nbsp;
-													<a href="adminflightdelete?flightId=${flight.getFlightId()}">Delete</a>
+													<a href="adminflightdelete?flightId=${flight.key.getFlightId()}">Delete</a>
 												</td>
 											</c:if>
 										</tr>
