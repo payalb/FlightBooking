@@ -85,6 +85,10 @@
 														<a href="flightinfo?flightId=${flight.key.getFlightId()}">Book</a>
 														&nbsp;&nbsp;&nbsp;&nbsp;
 													</c:if>
+													<c:if test="${!entry.value}">
+														<c:out value="Sold Out"> </c:out>>
+														&nbsp;&nbsp;&nbsp;&nbsp;
+													</c:if>
 													<a href="adminflightinfo?flightId=${flight.key.getFlightId()}">Edit</a>
 													&nbsp;&nbsp;&nbsp;&nbsp;
 													<a href="adminflightdelete?flightId=${flight.key.getFlightId()}">Delete</a>
