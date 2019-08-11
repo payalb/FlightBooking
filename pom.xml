@@ -63,7 +63,7 @@
 			<artifactId>powermock-api-mockito</artifactId>
 			<version>1.7.4</version>
 			<scope>test</scope>
-			
+
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.flywaydb/flyway-core -->
@@ -78,11 +78,20 @@
 			<artifactId>gson</artifactId>
 			<version>2.8.5</version>
 		</dependency>
-		<!-- //ojdbc jar: jdbc: part of jdk (java.sql : interfaces (statement, preapredstatement, driver, connection, resultset), driver jar specific to db  -->
+		<!-- //ojdbc jar: jdbc: part of jdk (java.sql : interfaces (statement, 
+			preapredstatement, driver, connection, resultset), driver jar specific to 
+			db -->
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<version>42.2.2</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.mockito/mockito-all -->
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>2.0.2-beta</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<build>
