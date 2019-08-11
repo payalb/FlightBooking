@@ -2,7 +2,9 @@ package com.controller;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,7 +14,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.dao.FlightDao;
 import com.dao.FlightDaoImpl;
+import com.dao.FlightSeatDao;
+import com.dao.FlightSeatDaoImpl;
 import com.dto.Flight;
+import com.dto.FlightSeat;
 import com.exception.DatabaseException;
 import com.exception.FileException;
 import com.exception.InputException;
@@ -21,11 +26,13 @@ import com.util.FormatUtil;
 @WebServlet("/adminflightquery")
 public class AdminFlightQueryCtrl extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
+
 	FlightDao flightDao = new FlightDaoImpl();
-       
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+	FlightSeatDao flightSeatDao = new FlightSeatDaoImpl();
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
 		String from = request.getParameter("from");
 		String to = request.getParameter("to");
 		LocalDate date = FormatUtil.strToLocalDate(request.getParameter("date"));
@@ -33,20 +40,33 @@ public class AdminFlightQueryCtrl extends HttpServlet {
 			if (from == null || to == null || date == null) {
 				throw new InputException("Invalid input during flight querying.");
 			}
-			
+
 			List<Flight> flights = flightDao.getFlightsByCityDate(from, to, date);
 			if (flights == null) {
-				throw new DatabaseException("Cannot get information from database.");
+				throw new DatabaseException("Cannot get flight list.");
 			} else {
-				request.setAttribute("flightList", flights);
+				Map<Flight, Boolean> map = new HashMap<>();
+				for (Flight flight : flights) {
+					FlightSeat seat = flightSeatDao.getFlightSeatById(flight.getFlightId());
+					if (seat == null) {
+						throw new DatabaseException("Cannot get flight seat information.");
+					}
+					boolean left = false;
+					if (seat.getBusinessLeft() > 0 || seat.getEconomyLeft() > 0 || seat.getFirstLeft() > 0) {
+						left = true;
+					}
+					map.put(flight, left);
+				}
+				request.setAttribute("flightList", map);
 				request.getRequestDispatcher("/admin_index.jsp").forward(request, response);
-			}	
+			}
 		} catch (FileException | DatabaseException | InputException e) {
 			response.sendRedirect(request.getContextPath() + "/admin_error?exception=" + e.getMessage());
 		}
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		doGet(request, response);
 	}
 
