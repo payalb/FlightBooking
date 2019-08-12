@@ -7,18 +7,21 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
 
+import com.dto.BookingStatus;
 import com.dto.Flight;
 import com.dto.Payment;
 import com.exception.DatabaseException;
 import com.exception.FileException;
+import com.exception.InputException;
 import com.util.DatabaseUtil;
 
 public class PaymentDaoImpl implements PaymentDao {
 
 	@Override
-	public int addPayment(Payment p) throws SQLException, DatabaseException, FileException {
+	public int addPayment(Payment p) throws SQLException, DatabaseException, FileException, InputException {
 		int paymentId = -1;
 		ResultSet set = null;
+		BookingDao bookingDao = new BookingDaoImpl();
 		String sql = "insert into payment(payment_id, passenger_id, booking_id, price, payment_time) "
 				+ "values (nextval('payment_seq'), ?, ?, ?, ?)";
 		try (Connection conn = DatabaseUtil.getConnection();
@@ -42,6 +45,8 @@ public class PaymentDaoImpl implements PaymentDao {
 			}
 			if (set != null)
 				set.close();
+			p.getBooking().setStatus(BookingStatus.PAID);
+			bookingDao.updateBooking(p.getBooking());
 			conn.commit();
 		}
 		catch (SQLException e){

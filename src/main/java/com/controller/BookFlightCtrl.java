@@ -1,6 +1,9 @@
 package com.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -27,6 +30,7 @@ public class BookFlightCtrl extends HttpServlet {
 
 	BookingDao bookingDao = new BookingDaoImpl();
 	FlightSeatDao flightSeatDao = new FlightSeatDaoImpl();
+	List<Booking> bookings = new ArrayList<Booking>();
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -71,6 +75,8 @@ public class BookFlightCtrl extends HttpServlet {
 				if (bookingId <= 0) {
 					throw new DatabaseException("Cannot insert booking information.");
 				}
+				booking.setBookingId(bookingId);
+				bookings.add(booking);				
 				FlightSeat seat = new FlightSeat(flightId, businessLeft, firstLeft, economyLeft, oldVersion++);
 				int row = flightSeatDao.updateFlightSeat(seat);
 				if (row <= 0) {
@@ -85,6 +91,8 @@ public class BookFlightCtrl extends HttpServlet {
 				if (bookingId <= 0) {
 					throw new DatabaseException("Cannot insert booking information.");
 				}
+				booking.setBookingId(bookingId);
+				bookings.add(booking);	
 				FlightSeat seat = new FlightSeat(flightId, businessLeft, firstLeft, economyLeft, oldVersion++);
 				int row = flightSeatDao.updateFlightSeat(seat);
 				if (row <= 0) {
@@ -99,13 +107,18 @@ public class BookFlightCtrl extends HttpServlet {
 				if (bookingId <= 0) {
 					throw new DatabaseException("Cannot insert booking information.");
 				}
+				booking.setBookingId(bookingId);
+				bookings.add(booking);	
 				FlightSeat seat = new FlightSeat(flightId, businessLeft, firstLeft, economyLeft, oldVersion++);
 				int row = flightSeatDao.updateFlightSeat(seat);
 				if (row <= 0) {
 					throw new DatabaseException("Cannot update flight seat information.");
 				}
 			}
-			response.sendRedirect(request.getContextPath() + "/passenger-history");
+			session.setAttribute("bookingList", bookings);
+			System.out.println( bookings.size());
+			request.getRequestDispatcher("/payment.jsp").forward(request, response);
+			//response.sendRedirect(request.getContextPath() + "/passenger-history");
 		} catch (InputException | DatabaseException | FileException e) {
 			response.sendRedirect(request.getContextPath() + "/error?exception=" + e.getMessage());
 		}

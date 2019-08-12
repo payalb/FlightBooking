@@ -10,6 +10,7 @@ import java.util.List;
 import com.dto.Booking;
 import com.exception.DatabaseException;
 import com.exception.FileException;
+import com.exception.InputException;
 import com.util.DatabaseUtil;
 import com.util.EnumUtil;
 
@@ -64,8 +65,8 @@ public class BookingDaoImpl implements BookingDao{
 	public int BookingFlight(Booking booking) throws DatabaseException, FileException {
 		int booking_id = 0;
 		String insertSql = "insert into booking(booking_id, passenger_id, flight_id, seat_number, baggage, class, status) "
-				+ "values (booking_seq.nextval, ?, ?, ?, ?, ?, ?)";
-		String querySql = "select booking_seq.currval as id from dual";
+				+ "values (nextval('booking_seq'), ?, ?, ?, ?, ?, ?)";
+		String querySql = "select currval('booking_seq') as id ";
 		ResultSet set = null;
 		try (Connection conn = DatabaseUtil.getConnection(); 
 				PreparedStatement insertPS = conn.prepareStatement(insertSql);
@@ -92,6 +93,7 @@ public class BookingDaoImpl implements BookingDao{
 			}
 			conn.commit();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new DatabaseException("Unable to book ticket: " + e.getMessage());
 		}
 		return booking_id;
@@ -119,6 +121,33 @@ public class BookingDaoImpl implements BookingDao{
 		}		
 		
 		return booking;
+	}
+
+	@Override
+	public int updateBooking(Booking booking) throws DatabaseException, FileException, InputException {
+		int row = 0;
+		String sql = "update booking set flight_id = ?, seat_number = ?, baggage = ?, class = ?, status  = ? where booking_id = ?";
+		
+		try (Connection conn = DatabaseUtil.getConnection(); PreparedStatement ps = conn.prepareStatement(sql);) {
+			
+			if (booking.getBookingId() <=0) {
+				throw new InputException("Invalid booking operation.");
+			}
+			ps.setInt(1, booking.getFlightId());
+			ps.setInt(2, booking.getSeatNumber());
+			ps.setInt(3, booking.getBaggage());
+			ps.setString(4, booking.getFlightClass().toString());
+			ps.setString(5, booking.getStatus().toString());
+			ps.setInt(6, booking.getBookingId());
+			row = ps.executeUpdate();
+			if (row == 0) {
+				throw new DatabaseException("Unable to update flight seat information.");
+			}
+			conn.commit();
+		} catch (SQLException e) {
+			throw new DatabaseException("Unable to update flight seat information: " + e.getMessage());
+		}
+		return row;
 	}
 
 }

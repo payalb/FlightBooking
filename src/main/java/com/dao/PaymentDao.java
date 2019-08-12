@@ -6,10 +6,11 @@ import java.util.List;
 import com.dto.Payment;
 import com.exception.DatabaseException;
 import com.exception.FileException;
+import com.exception.InputException;
 
 public interface PaymentDao {
 
-	public int addPayment(Payment p) throws SQLException, DatabaseException, FileException;
+	public int addPayment(Payment p) throws SQLException, DatabaseException, FileException, InputException;
 	
 	public Payment getPaymentById(int paymentId) throws DatabaseException, FileException;
 	
