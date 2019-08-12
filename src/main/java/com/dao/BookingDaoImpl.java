@@ -97,4 +97,28 @@ public class BookingDaoImpl implements BookingDao{
 		return booking_id;
 	}
 
+	@Override
+	public Booking getBookingById(int bookingId) throws SQLException, DatabaseException, FileException {
+		
+		Booking booking = null;
+		ResultSet set = null;
+		String sql = "select booking_id, flight_id, seat_number, baggage, class, status from booking where booking_id = ?";
+		try (Connection conn = DatabaseUtil.getConnection(); PreparedStatement ps = conn.prepareStatement(sql);) {
+			ps.setInt(1, bookingId);
+			set = ps.executeQuery();
+			while (set.next()) {
+				booking = new Booking(bookingId, set.getInt("passengerId"), 
+						set.getInt("flight_id"), set.getInt("seat_number"), set.getInt("baggage"), 
+						EnumUtil.stringToFlightClass(set.getString("class")), 
+						EnumUtil.stringToBookingStatus(set.getString("status")));
+			}
+			if (set != null)
+				set.close();			
+		} catch (SQLException e) {
+			throw new DatabaseException("Unable to get booking information: " + e.getMessage());
+		}		
+		
+		return booking;
+	}
+
 }

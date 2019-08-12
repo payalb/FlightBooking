@@ -74,7 +74,7 @@
 				          		<tbody>
 			          				<c:forEach items="${flightList}" var="flight">
 										<tr>
-											<td>${flight.key。getFlightId()}</td>
+											<td>${flight.key.getFlightId()}</td>
 											<td>${flight.key.getDepartureCity()}</td>
 											<td>${flight.key.getArrivalCity()}</td>
 											<td>${flight.key.getDepartureTime()}</td>
