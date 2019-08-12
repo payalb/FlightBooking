@@ -19,6 +19,9 @@ import com.dto.Booking;
 @RunWith(PowerMockRunner.class)
 
 public class PaymentCtrlTest {
+	
+	PaymentCtrl ctrl = new PaymentCtrl(); 
+	
 	@Mock HttpServletRequest request;
 	@Mock HttpServletResponse response;
 	@Mock PaymentDao impl;
@@ -33,6 +36,7 @@ public class PaymentCtrlTest {
 		Mockito.when(request.getSession(false)).thenReturn(session);
 		Mockito.when(session.getAttribute("bookingList")).thenReturn(bookingList);
 		Mockito.when(bookingList.size()).thenReturn(1);
+		Mockito.when(session.getAttribute("paymentAmount")).thenReturn(3);
 		
 	}
 	
