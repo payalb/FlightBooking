@@ -1,8 +1,10 @@
 package com.controller;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -31,12 +33,13 @@ public class PaymentCtrlTest {
 	List<Booking> bookingList = Arrays.asList(booking);
 	
 	@Test
-	public void test1()
+	public void test1() throws ServletException, IOException
 	{
 		Mockito.when(request.getSession(false)).thenReturn(session);
 		Mockito.when(session.getAttribute("bookingList")).thenReturn(bookingList);
 		Mockito.when(bookingList.size()).thenReturn(1);
 		Mockito.when(session.getAttribute("paymentAmount")).thenReturn(3);
+		ctrl.doPost(request, response);
 		
 	}
 	

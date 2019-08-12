@@ -36,7 +36,7 @@ public class RegisterCtrl extends HttpServlet {
 			if (firstName == null || lastName == null || email == null || password == null || gender == null) {
 				throw new InputException("Invalid input information during registration.");
 			}
-			System.out.println("YO!YO!3");
+			//System.out.println("YO!YO!3");
 			Passenger passenger = new Passenger(password, firstName, lastName, email, gender);
 			passenger = passengerDao.passengerRegister(passenger);
 			HttpSession session = request.getSession(true);

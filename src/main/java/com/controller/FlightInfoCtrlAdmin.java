@@ -18,8 +18,8 @@ import com.exception.FileException;
 import com.exception.InputException;
 import com.util.FormatUtil;
 
-@WebServlet("/flightinfo")
-public class FlightInfoCtrl extends HttpServlet {
+@WebServlet("/flightinfoadmin")
+public class FlightInfoCtrlAdmin extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	FlightSeatDao flightSeatDao;

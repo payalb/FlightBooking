@@ -19,10 +19,11 @@ public class LogoutFilter implements Filter {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
 		HttpSession session = req.getSession(false);
-		if (session == null || session.getAttribute("passengerId") == null 
-				|| session.getAttribute("passengerEmail") == null) {
+		if ((session == null || session.getAttribute("passengerId") == null 
+				|| session.getAttribute("passengerEmail") == null) && session.getAttribute("adminName") != null) {
 			req.getRequestDispatcher("/").forward(req, res);
 		}
+		
 		chain.doFilter(request, response);
 	}
 

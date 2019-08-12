@@ -82,11 +82,11 @@
 											<c:if test="${sessionScope.adminName!=null}">
 												<td>
 													<c:if test="${flight.value}">
-														<a href="flightinfo?flightId=${flight.key.getFlightId()}">Book</a>
+														<a href="flightinfoadmin?flightId=${flight.key.getFlightId()}">Book</a>
 														&nbsp;&nbsp;&nbsp;&nbsp;
 													</c:if>
-													<c:if test="${!entry.value}">
-														<c:out value="Sold Out"> </c:out>>
+													<c:if test="${!flight.value}">
+														<c:out value="Sold Out"> </c:out>
 														&nbsp;&nbsp;&nbsp;&nbsp;
 													</c:if>
 													<a href="adminflightinfo?flightId=${flight.key.getFlightId()}">Edit</a>
