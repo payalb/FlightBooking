@@ -17,9 +17,16 @@
     	<button class="btn btn-outline-success btn-left my-2 my-sm-0" onclick="javascript:location.href='login'">Login</button>
     	<button class="btn btn-outline-success my-2 my-sm-0" onclick="javascript:location.href='register'">Register</button>
     </c:if>
-    <c:if test="${sessionScope.passengerEmail!=null}">
+    <c:if test="${sessionScope.passengerEmail!=null && sessionScope.passengerId!=0}">
     	<button class="btn btn-outline-success btn-left my-2 my-sm-0" onclick="javascript:location.href='logout'">Logout</button>
     	<button class="btn btn-outline-success my-2 my-sm-0" onclick="javascript:location.href='profileinfo'">${sessionScope.passengerEmail}</button>
     </c:if>
+        <c:if test="${sessionScope.passengerId==0}">
+    	<button class="btn btn-outline-success btn-left my-2 my-sm-0" onclick="javascript:location.href='logout'">Logout</button>
+    	<button class="btn btn-outline-success my-2 my-sm-0" onclick="javascript:location.href='profileinfo'">${sessionScope.passengerEmail}</button>
+    	<a href = "./admin"><button class="btn btn-outline-success my-2 my-sm-0">To Admin Page</button></a>
+    </c:if>
+    
+    
   </div>
 </nav>

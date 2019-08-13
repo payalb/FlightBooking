@@ -18,7 +18,7 @@
     </ul>
     <c:if test="${sessionScope.adminName!=null}">
     	<button class="btn btn-outline-success btn-left my-2 my-sm-0" onclick="javascript:location.href='admin-logout'">Logout</button>
-    	<a href = "./login"><button class="btn btn-outline-success my-2 my-sm-0">Passenger Login</button></a>
+    	<a href = "./login"><button class="btn btn-outline-success my-2 my-sm-0">To Passenger Page</button></a>
    	</c:if>
   </div>
 </nav>
