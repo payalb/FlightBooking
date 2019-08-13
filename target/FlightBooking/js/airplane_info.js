@@ -18,6 +18,40 @@ $('document').ready(function () {
 			console.log(e);
 		}
 	});
+	$(function() {
+        $("#deptCity").autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    url: "fcauto",
+                    type: "GET",
+                    data: {
+                        find: request.find
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                        response(data);
+                    }
+                });
+            }
+        });
+    });
+    $(function() {
+        $("#arrCity").autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    url: "tcauto",
+                    type: "GET",
+                    data: {
+                        find: request.find
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                        response(data);
+                    }
+                });
+            }
+        });
+    });
 	$('#airplaneId').on('change', function() {
 		$.get({
 	        url: "airplaneinfo",

@@ -76,7 +76,7 @@
 	        </div>
 	      </div>
 	
-	      <button class="btn btn-primary btn-lg btn-block" name="submitCheck" value="SUBMIT">A test V2</button>
+	      <button class="btn btn-primary btn-lg btn-block" name="submitCheck" value="SUBMIT">Submit</button>
 	    </form>
 	  </div>
 	</main>
