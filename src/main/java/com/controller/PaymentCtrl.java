@@ -79,6 +79,7 @@ public class PaymentCtrl extends HttpServlet {
 				
 			}
 				catch(InputException | DatabaseException | FileException | SQLException e) {
+					//throw new InputException("Invalid input information during making payment.");
 					response.sendRedirect(request.getContextPath() + "/error?exception=" + e.getMessage());
 				
 			}

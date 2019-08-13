@@ -1,6 +1,7 @@
 package com.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import com.dao.PaymentDao;
 import com.dto.Booking;
+import com.exception.InputException;
 
 @RunWith(PowerMockRunner.class)
 
@@ -28,17 +30,19 @@ public class PaymentCtrlTest {
 	@Mock HttpServletResponse response;
 	@Mock PaymentDao impl;
 	@Mock HttpSession session;
-	@Mock Booking booking;
+	//@Mock Booking booking;
 	
-	List<Booking> bookingList = Arrays.asList(booking);
+	List<Booking> bookingList = new ArrayList<Booking>();
+
 	
-	@Test
+	@Test(expected = IOException.class)
 	public void test1() throws ServletException, IOException
 	{
+		Booking booking = null;
+		bookingList.add(booking);
 		Mockito.when(request.getSession(false)).thenReturn(session);
 		Mockito.when(session.getAttribute("bookingList")).thenReturn(bookingList);
-		Mockito.when(bookingList.size()).thenReturn(1);
-		Mockito.when(session.getAttribute("paymentAmount")).thenReturn(3);
+		Mockito.when(session.getAttribute("paymentAmount")).thenReturn(0l);
 		ctrl.doPost(request, response);
 		
 	}
