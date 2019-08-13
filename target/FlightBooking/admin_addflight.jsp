@@ -32,7 +32,7 @@
 	        </div>
 	      </div>
 	
-	      <div class="row">
+	      <div class="row" >
 	        <div class="col-md-3 mb-3">
 	          <label for="deptDate">Departure Date</label>
 	          <input type="date" class="form-control" id="deptDate" name="deptDate" required>
@@ -76,7 +76,7 @@
 	        </div>
 	      </div>
 	
-	      <button class="btn btn-primary btn-lg btn-block" type="submit">Submit</button>
+	      <button class="btn btn-primary btn-lg btn-block" name="submitCheck" value="SUBMIT">A test V2</button>
 	    </form>
 	  </div>
 	</main>

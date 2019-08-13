@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: com.dao.AdminDaoTest
 -------------------------------------------------------------------------------
-Tests run: 2, Failures: 0, Errors: 2, Skipped: 0, Time elapsed: 0.005 sec <<< FAILURE!
-initializationError(com.dao.AdminDaoTest)  Time elapsed: 0 sec  <<< ERROR!
+Tests run: 2, Failures: 0, Errors: 2, Skipped: 0, Time elapsed: 0.008 sec <<< FAILURE!
+initializationError(com.dao.AdminDaoTest)  Time elapsed: 0.001 sec  <<< ERROR!
 java.lang.Exception: Method init() should be static
 	at org.junit.runners.model.FrameworkMethod.validatePublicVoid(FrameworkMethod.java:93)
 	at org.junit.runners.model.FrameworkMethod.validatePublicVoidNoArg(FrameworkMethod.java:74)
