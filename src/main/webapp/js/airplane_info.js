@@ -18,7 +18,7 @@ $('document').ready(function () {
 			console.log(e);
 		}
 	});
-	$(function() {
+    $(function() {
         $("#deptCity").autocomplete({
             source: function(request, response) {
                 $.ajax({
@@ -52,6 +52,29 @@ $('document').ready(function () {
             }
         });
     });
+//	$( function() {
+//	    var availableTags = [
+//	      "Delhi",
+//	      "New York",
+//	      "Chicago",
+//	      "Pune","San Francisco",
+//	      "Bangalore","Los Angeles","St Charles",
+//	      "Shanghai","Albany", "Austin","Belfast"
+//	    ];
+//	    $( "#deptCity" ).autocomplete({
+//	      source: availableTags
+//	    });
+//	    $( "#arrCity" ).autocomplete({
+//		      source: availableTags
+//		    });
+//	    
+//	  } );
+
+	
+
+	
+	  
+	
 	$('#airplaneId').on('change', function() {
 		$.get({
 	        url: "airplaneinfo",
@@ -71,6 +94,9 @@ $('document').ready(function () {
 	        }
 	   });
 	});
+	
+
+
 });
 jQuery.validator.setDefaults({
 	errorElement: 'span',
@@ -92,8 +118,13 @@ jQuery.validator.setDefaults({
     				minlength : 2,
     			},
     			arrCity : {
+    				notEqual :deptCity
+    			},
+    			
+    			arrCity : {
     				required : true,
-    				minlength : 2
+    				minlength : 2,
+    				
     			},
     		
     			arrTime :{
