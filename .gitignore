@@ -2,3 +2,5 @@
 target/classes/database.properties
 target/classes/database.properties
 *.properties
+src/main/resources/database.properties
+target/classes/database.properties
