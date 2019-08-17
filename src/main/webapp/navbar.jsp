@@ -21,15 +21,11 @@
     	<button class="btn btn-outline-success btn-left my-2 my-sm-0" onclick="javascript:location.href='logout'">Logout</button>
     	<button class="btn btn-outline-success my-2 my-sm-0" onclick="javascript:location.href='profileinfo'">${sessionScope.passengerEmail}</button>
     </c:if>
-<<<<<<< Updated upstream
-=======
+
      <c:if test="${sessionScope.passengerId==0}">
     	<button class="btn btn-outline-success btn-left my-2 my-sm-0" onclick="javascript:location.href='logout'">Logout</button>
     	<button class="btn btn-outline-success my-2 my-sm-0" onclick="javascript:location.href='profileinfo'">${sessionScope.passengerEmail}</button>
     	<a href = "./admin"><button class="btn btn-outline-success my-2 my-sm-0">To Admin Page</button></a>
     </c:if>
-    
-    
->>>>>>> Stashed changes
   </div>
 </nav>
