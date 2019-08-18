@@ -31,6 +31,8 @@ public class AdminLoginCtrl extends HttpServlet {
 				if (adminName != null && !"".equals(adminName)) {
 					HttpSession session= request.getSession(true);
 					session.setAttribute("adminName", adminName);
+					session.setAttribute("passengerId", 0);
+					session.setAttribute("passengerEmail", "admin@admin");
 					response.sendRedirect(request.getContextPath() + "/admin_index");
 				} else {
 					response.sendRedirect(request.getContextPath()+"/admin?errorMsg=Invalid username or password");

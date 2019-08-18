@@ -12,6 +12,10 @@
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
   <link href="css/navbar.css" rel="stylesheet">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  
+
+
 </head>
 
 <body>
@@ -24,11 +28,12 @@
 	      <div class="row">
 	        <div class="col-md-6 mb-3">
 	          <label for="deptCity">Departure City</label>
-	          <input type="text" class="form-control" id="deptCity" name="deptCity" placeholder="Departure City" required>
+	          <input  class="form-control" id="deptCity" name="deptCity" placeholder="Departure City" required>
 	        </div>
-	        <div class="col-md-6 mb-3">
+
+				<div class="col-md-6 mb-3">
 	          <label for="arrCity">Arrival City</label>
-	          <input type="text" class="form-control" id="arrCity" name="arrCity" placeholder="Arrival City" required>
+	          <input  class="form-control" id="arrCity" name="arrCity" placeholder="Arrival City" required>
 	        </div>
 	      </div>
 	
@@ -84,5 +89,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
 	<script src="js/airplane_info.js"></script>
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 </body>
 </html>

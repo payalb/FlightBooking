@@ -36,6 +36,7 @@
 							<th>Arrival Time</th>
 							<th>Seat Class</th>
 							<th>Seat No.</th>
+							<th>Status</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -49,6 +50,7 @@
 								<td>${history.value.getArrivalTime()}</td>
 								<td>${history.key.getFlightClass()}</td>
 								<td>${history.key.getSeatNumber()}</td>
+								<td>${history.key.getStatus().toString()}</td>
 							</tr>
 						</c:forEach>
 						<c:if test="${bookingHistory==null}">

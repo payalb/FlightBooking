@@ -36,14 +36,14 @@ public class RegisterCtrl extends HttpServlet {
 			if (firstName == null || lastName == null || email == null || password == null || gender == null) {
 				throw new InputException("Invalid input information during registration.");
 			}
-			System.out.println("YO!YO!3");
+			//System.out.println("YO!YO!3");
 			Passenger passenger = new Passenger(password, firstName, lastName, email, gender);
 			passenger = passengerDao.passengerRegister(passenger);
 			HttpSession session = request.getSession(true);
-			System.out.println(passenger.getPassengerId());
-			System.out.println(passenger.getEmail());
+			//System.out.println(passenger.getPassengerId());
+			//System.out.println(passenger.getEmail());
 			session.setAttribute("passengerId", passenger.getPassengerId());
-			System.out.println("BEFORE HERE!");
+			//System.out.println("BEFORE HERE!");
 			session.setAttribute("passengerEmail", passenger.getEmail());
 			response.sendRedirect(request.getContextPath() + "/");
 

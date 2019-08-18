@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: com.controller.PassengerLoginCtrlTest
 -------------------------------------------------------------------------------
-Tests run: 3, Failures: 3, Errors: 0, Skipped: 0, Time elapsed: 0.747 sec <<< FAILURE!
-test1(com.controller.PassengerLoginCtrlTest)  Time elapsed: 0.099 sec  <<< FAILURE!
+Tests run: 3, Failures: 3, Errors: 0, Skipped: 0, Time elapsed: 0.851 sec <<< FAILURE!
+test1(com.controller.PassengerLoginCtrlTest)  Time elapsed: 0.108 sec  <<< FAILURE!
 Argument(s) are different! Wanted:
 httpServletResponse.sendRedirect(
     "/FlightBooking/login?errorMsg=Invalid username or password"
@@ -94,7 +94,7 @@ java.lang.AssertionError: Expected exception: com.exception.DatabaseException
 	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:115)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:75)
 
-test3(com.controller.PassengerLoginCtrlTest)  Time elapsed: 0.004 sec  <<< FAILURE!
+test3(com.controller.PassengerLoginCtrlTest)  Time elapsed: 0.003 sec  <<< FAILURE!
 Argument(s) are different! Wanted:
 httpServletResponse.sendRedirect(
     "/FlightBooking/"

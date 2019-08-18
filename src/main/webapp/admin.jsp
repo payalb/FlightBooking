@@ -30,7 +30,7 @@
 		<button class="btn btn-lg btn-primary btn-block" type="submit">Sign
 			in</button>
 		<a href="./login"><button
-				class="btn btn-lg btn-primary btn-block" type="button">User
+				class="btn btn-lg btn-primary btn-block" type="button">To User
 				sign in</button></a>
 	</form>
 </body>

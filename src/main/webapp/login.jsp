@@ -28,7 +28,7 @@
 			<input type="password" id="inputPassword" name="password" class="form-control" 
 				placeholder="Password" required>
 		<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-		<a href="./admin"><button class="btn btn-lg btn-primary btn-block" type="button">Admin sign in</button></a>
+		<a href="./admin"><button class="btn btn-lg btn-primary btn-block" type="button">To Admin sign in</button></a>
 	</form>
 	<jsp:include page="footer.jsp"></jsp:include>
 </body>

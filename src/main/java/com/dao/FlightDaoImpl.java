@@ -34,7 +34,9 @@ public class FlightDaoImpl implements FlightDao {
 			if (row == 0) {
 				throw new DatabaseException("Unable to insert flight information.");
 			} else {
+
 				//ps -> ps1
+
 				set = ps1.executeQuery();
 				if (set.next()) {
 					flightId = set.getInt("id");

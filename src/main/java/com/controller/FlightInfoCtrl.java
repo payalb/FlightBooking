@@ -46,6 +46,7 @@ public class FlightInfoCtrl extends HttpServlet {
 			request.setAttribute("flight", flight);
 			request.setAttribute("seat", seat);
 			request.getRequestDispatcher("/booking.jsp").forward(request, response);
+			return;
 		} catch (InputException | DatabaseException | FileException e) {
 			response.sendRedirect(request.getContextPath() + "/error?exception=" + e.getMessage());
 		}
