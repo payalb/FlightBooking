@@ -57,6 +57,36 @@
 							</tbody>
 						</table>
 					</div>
+					<c:if test="${failedBookingList.size()>0}">
+					<h4>Failed because other passenger has booked</h4>>
+					<div class="table-responsive">
+						<table class="table table-bordered" id="dataTable" width="100%"
+							cellspacing="0">
+							<thead>
+								<tr>
+									<th>Flight ID</th>
+									<th>Booking ID</th>
+									<th>Seat Type</th>
+									<th>Baggage</th>
+									<th>Seat Number</th>
+									<th>Status</th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:set value="0" var="paymentAmount" />  
+								<c:forEach items="${failedBookingList}" var="booking">
+									<tr>
+										<td>${booking.getFlightId()}</td>
+										<td>${booking.getBookingId()}</td>
+										<td>${booking.getFlightClass().toString()}</td>
+										<td>${booking.getBaggage()}</td>
+										<td>${booking.getSeatNumber()}</td>
+										<td>${booking.getStatus().toString()}</td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</div>
 					<c:set var="paymentAmount" value="${paymentAmount}" scope="session"/>
 					<a href="payment">Make Payment!</a>
 				</c:if>

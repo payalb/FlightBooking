@@ -61,6 +61,11 @@ public class FlightSeatDaoImpl implements FlightSeatDao{
 	@Override
 	public int updateFlightSeat(FlightSeat flightSeat) throws DatabaseException, FileException, InputException {
 		int row = 0;
+		int newVersion = getVersion(flightSeat.getVersion());
+		if (newVersion != flightSeat.getVersion()){
+			return -1;
+		}
+		
 		String sql = "update flight_seat set businessclass_left = ?, firstclass_left = ?, economyclass_left = ?"
 				+ ", version = ? where flight_id = ? and version = ?";
 		try (Connection conn = DatabaseUtil.getConnection(); PreparedStatement ps = conn.prepareStatement(sql);) {
@@ -83,6 +88,24 @@ public class FlightSeatDaoImpl implements FlightSeatDao{
 			throw new DatabaseException("Unable to update flight seat information: " + e.getMessage());
 		}
 		return row;
+	}
+	
+	public int getVersion(int flightId) throws DatabaseException, FileException {
+		ResultSet set = null;
+		String sql = "select firstclass_left, economyclass_left, businessclass_left, version "
+				+ "from flight_seat where flight_id = ?";
+		try (Connection conn = DatabaseUtil.getConnection(); PreparedStatement ps = conn.prepareStatement(sql);) {
+			ps.setInt(1, flightId);
+			set = ps.executeQuery();
+			if (set.next()) {
+				return set.getInt("version");
+			}
+			if (set != null)
+				set.close();
+		} catch (SQLException e) {
+			throw new DatabaseException("Unable to get flight seat information: " + e.getMessage());
+		}
+		return -1;
 	}
 
 }

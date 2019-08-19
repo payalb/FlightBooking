@@ -29,6 +29,7 @@ public class FromCityAutocomplete extends HttpServlet {
 		list.add("Mumbai");
 		System.out.println(list);
 		String Json = new Gson().toJson(list);
+		//System.out.println(Json);
 		response.getWriter().write(Json);
 	}
 

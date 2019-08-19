@@ -31,6 +31,7 @@ public class BookFlightCtrl extends HttpServlet {
 	BookingDao bookingDao = new BookingDaoImpl();
 	FlightSeatDao flightSeatDao = new FlightSeatDaoImpl();
 	List<Booking> bookings = new ArrayList<Booking>();
+	List<Booking> failedBookings = new ArrayList<Booking>();
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -59,8 +60,8 @@ public class BookFlightCtrl extends HttpServlet {
 		Integer oldVersion = FormatUtil.strToInteger(request.getParameter("oldVersion"));
 
 		try {
-			if (flightId == null || busiBaggage == null || businessLeft == null 
-					|| firstLeft == null || economyLeft == null || oldVersion == null) {
+			if (flightId == null || busiBaggage == null || businessLeft == null || firstLeft == null
+					|| economyLeft == null || oldVersion == null) {
 				throw new InputException("Invalid input information during booking.");
 			} else {
 				if (business == 0 && firstClass == 0 && economy == 0) {
@@ -69,56 +70,80 @@ public class BookFlightCtrl extends HttpServlet {
 			}
 
 			for (int i = 0; i < business; i++) {
-				Booking booking = new Booking(passengerId, flightId, Integer.parseInt(1 + "" + businessLeft--),
-						busiBaggage, FlightClass.BUSINESSCLASS, BookingStatus.RESERVED);
-				int bookingId = bookingDao.BookingFlight(booking);
-				if (bookingId <= 0) {
-					throw new DatabaseException("Cannot insert booking information.");
-				}
-				booking.setBookingId(bookingId);
-				bookings.add(booking);				
-				FlightSeat seat = new FlightSeat(flightId, businessLeft, firstLeft, economyLeft, oldVersion++);
+				FlightSeat seat = new FlightSeat(flightId, businessLeft, firstLeft, economyLeft, oldVersion);
 				int row = flightSeatDao.updateFlightSeat(seat);
-				if (row <= 0) {
-					throw new DatabaseException("Cannot update flight seat information.");
+				if (row != -1) {
+					Booking booking = new Booking(passengerId, flightId, Integer.parseInt(1 + "" + businessLeft--),
+							busiBaggage, FlightClass.BUSINESSCLASS, BookingStatus.RESERVED);
+					int bookingId = bookingDao.BookingFlight(booking);
+					if (bookingId <= 0) {
+						throw new DatabaseException("Cannot insert booking information.");
+					}
+					booking.setBookingId(bookingId);
+					bookings.add(booking);
+					if (row == 0) {
+						throw new DatabaseException("Cannot update flight seat information.");
+					}
+				}
+				else {
+					Booking booking = new Booking(passengerId, flightId, Integer.parseInt(1 + "" + businessLeft--),
+							busiBaggage, FlightClass.BUSINESSCLASS, BookingStatus.CANCELLED);
+					failedBookings.add(booking);
 				}
 			}
 
 			for (int i = 0; i < firstClass; i++) {
-				Booking booking = new Booking(passengerId, flightId, Integer.parseInt(2 + "" + firstLeft--),
-						firstBaggage, FlightClass.FIRSTCLASS, BookingStatus.RESERVED);
-				int bookingId = bookingDao.BookingFlight(booking);
-				if (bookingId <= 0) {
-					throw new DatabaseException("Cannot insert booking information.");
-				}
-				booking.setBookingId(bookingId);
-				bookings.add(booking);	
-				FlightSeat seat = new FlightSeat(flightId, businessLeft, firstLeft, economyLeft, oldVersion++);
+				FlightSeat seat = new FlightSeat(flightId, businessLeft, firstLeft, economyLeft, oldVersion);
 				int row = flightSeatDao.updateFlightSeat(seat);
-				if (row <= 0) {
-					throw new DatabaseException("Cannot update flight seat information.");
+
+				if (row != -1) {
+					Booking booking = new Booking(passengerId, flightId, Integer.parseInt(2 + "" + firstLeft--),
+							firstBaggage, FlightClass.FIRSTCLASS, BookingStatus.RESERVED);
+					int bookingId = bookingDao.BookingFlight(booking);
+					if (bookingId <= 0) {
+						throw new DatabaseException("Cannot insert booking information.");
+					}
+					booking.setBookingId(bookingId);
+					bookings.add(booking);
+					if (row == 0) {
+						throw new DatabaseException("Cannot update flight seat information.");
+					}
+				}
+				else {
+					Booking booking = new Booking(passengerId, flightId, Integer.parseInt(1 + "" + businessLeft--),
+							busiBaggage, FlightClass.BUSINESSCLASS, BookingStatus.CANCELLED);
+					failedBookings.add(booking);
 				}
 			}
 
 			for (int i = 0; i < economy; i++) {
-				Booking booking = new Booking(passengerId, flightId, Integer.parseInt(3 + "" + economyLeft--),
-						econoBaggage, FlightClass.ECONOMYCLASS, BookingStatus.RESERVED);
-				int bookingId = bookingDao.BookingFlight(booking);
-				if (bookingId <= 0) {
-					throw new DatabaseException("Cannot insert booking information.");
-				}
-				booking.setBookingId(bookingId);
-				bookings.add(booking);	
-				FlightSeat seat = new FlightSeat(flightId, businessLeft, firstLeft, economyLeft, oldVersion++);
+				FlightSeat seat = new FlightSeat(flightId, businessLeft, firstLeft, economyLeft, oldVersion);
 				int row = flightSeatDao.updateFlightSeat(seat);
-				if (row <= 0) {
-					throw new DatabaseException("Cannot update flight seat information.");
+
+				if (row != -1) {
+					Booking booking = new Booking(passengerId, flightId, Integer.parseInt(3 + "" + economyLeft--),
+							econoBaggage, FlightClass.ECONOMYCLASS, BookingStatus.RESERVED);
+					int bookingId = bookingDao.BookingFlight(booking);
+					if (bookingId <= 0) {
+						throw new DatabaseException("Cannot insert booking information.");
+					}
+					booking.setBookingId(bookingId);
+					bookings.add(booking);
+					if (row == 0) {
+						throw new DatabaseException("Cannot update flight seat information.");
+					}
+				}
+				else {
+					Booking booking = new Booking(passengerId, flightId, Integer.parseInt(1 + "" + businessLeft--),
+							busiBaggage, FlightClass.BUSINESSCLASS, BookingStatus.CANCELLED);
+					failedBookings.add(booking);
 				}
 			}
 			session.setAttribute("bookingList", bookings);
-			System.out.println( bookings.size());
+			session.setAttribute("failedBookingList", failedBookings);
+			System.out.println(bookings.size());
 			request.getRequestDispatcher("/payment.jsp").forward(request, response);
-			//response.sendRedirect(request.getContextPath() + "/passenger-history");
+			// response.sendRedirect(request.getContextPath() + "/passenger-history");
 		} catch (InputException | DatabaseException | FileException e) {
 			response.sendRedirect(request.getContextPath() + "/error?exception=" + e.getMessage());
 		}

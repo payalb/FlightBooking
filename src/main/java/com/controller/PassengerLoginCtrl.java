@@ -33,11 +33,12 @@ public class PassengerLoginCtrl extends HttpServlet {
 			Passenger passenger = passengerDao.passengerLogin(email, password);
 			if (passenger != null) {
 				HttpSession session= request.getSession(true);
-				if (passenger.getPassengerId() != 0 && passenger.getEmail() != null) {
+				if (passenger.getEmail() != null) {
 					session.setAttribute("passengerId", passenger.getPassengerId());
 					session.setAttribute("passengerEmail", passenger.getEmail());
 					response.sendRedirect(request.getContextPath()+"/");
 				} else {
+					System.out.println("?");
 					throw new DatabaseException("Invalid passenger information.");
 				}
 			} else {

@@ -30,9 +30,9 @@
 	        <div class="col-md-2 mb-3">
 	          <label for="busiBaggage">Baggage</label>
 	          <select class="custom-select d-block w-100" id="busiBaggage" name="busiBaggage" required>
-	            <option value="1" selected>1</option>
+	            <option value="1">1</option>
 	            <option value="2">2</option>
-	            <option value="0">No Baggage</option>
+	            <option value="0" selected>No Baggage</option>
 	          </select>
 	        </div>
 	        <div class="col-md-2 mb-3">
@@ -43,9 +43,9 @@
 	        <div class="col-md-2 mb-3">
 	          <label for="firstBaggage">Baggage</label>
 	          <select class="custom-select d-block w-100" id="firstBaggage" name="firstBaggage" required>
-	            <option value="1" selected>1</option>
+	            <option value="1">1</option>
 	            <option value="2">2</option>
-	            <option value="0">No Baggage</option>
+	            <option value="0" selected>No Baggage</option>
 	          </select>
 	        </div>
 	        <div class="col-md-2 mb-3">
@@ -56,9 +56,9 @@
 	        <div class="col-md-2 mb-3">
 	          <label for="econoBaggage">Baggage</label>
 	          <select class="custom-select d-block w-100" id="econoBaggage" name="econoBaggage" required>
-	            <option value="1" selected>1</option>
+	            <option value="1">1</option>
 	            <option value="2">2</option>
-	            <option value="0">No Baggage</option>
+	            <option value="0" selected>No Baggage</option>
 	          </select>
 	        </div>
 	      </div>
