@@ -39,7 +39,7 @@
 	      <div class="row">
 	        <div class="col-md-3 mb-3">
 	          <label for="deptDate">Departure Date</label>
-	          <input type="date" class="form-control" id="deptDate" name="deptDate" value="${flight.getDepartureTime().toLocalDate()}" required>
+	          <input type="date" class="form-control" id="deptDate" name="deptDate" value="${flight.getDepartureDate().toLocalDate()}" required>
 	        </div>
 	        <div class="col-md-3 mb-3">
 	          <label for="deptTime">Departure Time</label>
@@ -47,7 +47,7 @@
 	        </div>
 	        <div class="col-md-3 mb-3">
 	          <label for="arrDate">Arrival Date</label>
-	          <input type="date" class="form-control" id="arrDate" name="arrDate" value="${flight.getArrivalTime().toLocalDate()}" required>
+	          <input type="date" class="form-control" id="arrDate" name="arrDate" value="${flight.getArrivalDate().toLocalDate()}" required>
 	        </div>
 	        <div class="col-md-3 mb-3">
 	          <label for="arrTime">Arrival Time</label>
