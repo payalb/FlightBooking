@@ -57,6 +57,7 @@ public class AdminDaoTest {
 		//createPreparedStatement.close();
 		//conn.close();
 	
+	}
 	@Test
 	public void testLoginInvalid() throws SQLException, IOException, DatabaseException, FileException {
 		AdminDao adminDao=new AdminDaoImpl();

@@ -24,7 +24,7 @@ public class AdminLoginCtrl extends HttpServlet {
 		
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
-		
+	
 		try {
 			if (username != null && password != null) {
 				String adminName = adminDao.adminLogin(username, password);
