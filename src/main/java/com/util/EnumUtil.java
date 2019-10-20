@@ -3,6 +3,8 @@ package com.util;
 import com.dto.BookingStatus;
 import com.dto.FlightClass;
 import com.dto.Gender;
+import com.dto.SeatLocation;
+import com.dto.SeatStatus;
 
 public class EnumUtil {
 
@@ -66,5 +68,43 @@ public class EnumUtil {
 				break;
 		}
 		return flightClass;
+	}
+	
+	public static SeatStatus stringToSeatStatus(String str) {
+		str = str.trim();
+		if (str == null || "".equals(str)) {
+			return null;
+		}
+		SeatStatus status = null;
+		switch (str.toUpperCase()) {
+			case "AVAILABLE":
+				status = SeatStatus.AVAILABLE;
+				break;
+
+			case "INAVAILABLE":
+				status = SeatStatus.UNAVAILABLE;
+				break;				
+		}
+		return status;
+	}
+	
+	public static SeatLocation stringToSeatLocation(String str) {
+		str = str.trim();
+		if (str == null || "".equals(str)) {
+			return null;
+		}
+		SeatLocation location = null;
+		switch (str.toUpperCase()) {
+			case "WINDOW":
+				location = SeatLocation.WINDOW;
+				break;
+			case "AISLE":
+				location = SeatLocation.AISLE;
+				break;
+			case "OTHERS":
+				location = SeatLocation.OTHERS;
+				break;
+		}
+		return location;
 	}
 }
