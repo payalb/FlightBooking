@@ -38,7 +38,7 @@
 				</div>
 				<div class="col-md-3">
 					<label for="to">Date</label> <input type="date"
-						class="form-control" id="date" name="date" placeholder="Date"
+						class="form-control" id="date" name="date" placeholder="yyyy-mm-dd"
 						value="" required>
 				</div>
 				<div class="col-md-3 mt-2">

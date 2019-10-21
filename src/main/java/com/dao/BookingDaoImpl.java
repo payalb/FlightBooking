@@ -104,12 +104,12 @@ public class BookingDaoImpl implements BookingDao{
 		
 		Booking booking = null;
 		ResultSet set = null;
-		String sql = "select booking_id, flight_id, seat_number, baggage, class, status from booking where booking_id = ?";
+		String sql = "select passenger_id, flight_id, seat_number, baggage, class, status from booking where booking_id = ?";
 		try (Connection conn = DatabaseUtil.getConnection(); PreparedStatement ps = conn.prepareStatement(sql);) {
 			ps.setInt(1, bookingId);
 			set = ps.executeQuery();
 			while (set.next()) {
-				booking = new Booking(bookingId, set.getInt("passengerId"), 
+				booking = new Booking(bookingId, set.getInt("passenger_id"), 
 						set.getInt("flight_id"), set.getInt("seat_number"), set.getInt("baggage"), 
 						EnumUtil.stringToFlightClass(set.getString("class")), 
 						EnumUtil.stringToBookingStatus(set.getString("status")));

@@ -1,71 +1,114 @@
-//package com.dao;
-//
-//import static org.junit.Assert.*;
-//
-//import java.io.IOException;
-//import java.sql.Connection;
-//import java.sql.SQLException;
-//import java.util.Properties;
-//
-//import org.junit.BeforeClass;
-//import org.junit.Test;
-//import org.junit.runner.RunWith;
-//import org.powermock.api.mockito.PowerMockito;
-//import org.powermock.core.classloader.annotations.PowerMockIgnore;
-//import org.powermock.core.classloader.annotations.PrepareForTest;
-//import org.powermock.modules.junit4.PowerMockRunner;
-//
-//import com.util.DataSource;
-//import com.util.DatabaseUtil;
-//import com.util.PropertyUtil;
-//
-//
-//@RunWith(PowerMockRunner.class)
-//@PrepareForTest({PropertyUtil.class, DataSource.class, })
-//@PowerMockIgnore("javax.management.*")
-//public class PassengerDapImplTest {
-//
-//	@BeforeClass
-//	public static void init() throws ClassNotFoundException, SQLException, IOException {
-//		PowerMockito.mockStatic(PropertyUtil.class);
-//		Properties p = new Properties();
-//		p.load(PassengerDapImplTest.class.getResourceAsStream("/db_test.properties"));
-//		String CreateQuery="CREATE TABLE Passanger(\n" + 
-//				"Passanger_id INT NOT NULL AUTO_INCREMENT,\n" + 
-//				"username VARCHAR(20),\n" + 
-//				"FirstName VARCHAR(45) NOT NULL,\n" + 
-//				"LastName VARCHAR(45) ,\n" + 
-//				"SSN VARCHAR(9),\n" + 
-//				"Age INT,\n" + 
-//				"Street VARCHAR(45) NOT NULL,\n" + 
-//				"Apartment_number INT NOT NULL,\n" + 
-//				"City VARCHAR(45) NOT NULL,\n" + 
-//				"State VARCHAR(45) NOT NULL,\n" + 
-//				"Zip INT NOT NULL,\n" + 
-//				"Tel_home VARCHAR(45),\n" + 
-//				"Tel_office VARCHAR(45),\n" + 
-//				"Email VARCHAR(45),\n" + 
-//				"PRIMARY KEY (Passanger_id)\n" + 
-//				"\n" + 
-//				");" ;
-//		PowerMockito.when(PropertyUtil.getPropValues()).thenReturn(p);
-//		Connection conn = DatabaseUtil.getConnection();
-//		PreparedStatement createPreparedStatement = conn.prepareStatement(CreateQuery);
-//		createPreparedStatement.executeUpdate();
-//	}
-//	
-//	@Test
-//	public void testInsert() throws IOException, SQLException {
-//		Passanger p =new Passanger(null,"Sohan","P","3345",25,"St Charles",1000,"St Charles","IL",12345,"12345","456789","abc@abc.com");
-//		
-//		assertEquals(1,PassangerDao.insertPassanger(p));
-//	}
-//	
-//	@Test
-//	public void testGetId() throws IOException, SQLException {
-//		Passanger p =new Passanger("abc","Sohan","P","3345",25,"St Charles",1000,"St Charles","IL",12345,"12345","456789","abc@abc.com");
-//		PassangerDao.insertPassanger(p);
-//		assertEquals(2,PassangerDao.getPassangerId("abc"));
-//	}
-//
-//}
+package com.dao;
+
+import static org.junit.Assert.*;
+
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Properties;
+
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+
+import com.dto.Gender;
+import com.dto.Passenger;
+import com.exception.DatabaseException;
+import com.exception.FileException;
+import com.util.DataSource;
+import com.util.DatabaseUtil;
+import com.util.PropertyUtil;
+
+
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({PropertyUtil.class, DataSource.class})
+@PowerMockIgnore("javax.management.*")
+public class PassengerDapImplTest {
+
+	@InjectMocks PassengerDaoImpl pdl;
+	
+	@BeforeClass
+	public static void init() throws IOException, FileException, DatabaseException, SQLException {
+		PowerMockito.mockStatic(PropertyUtil.class);
+		Properties p = new Properties();
+		p.load(PassengerDapImplTest.class.getResourceAsStream("/db_test.properties"));
+		String CreateQuery="create table passenger(\n" + 
+				"    passenger_id integer primary key not null," + 
+				"    email varchar(45) not null," + 
+				"    password varchar(50) not null," + 
+				"    firstname varchar(45) not null," + 
+				"    lastname varchar(45) not null," + 
+				"    gender varchar(6) not null," + 
+				"    ssn varchar(9)," + 
+				"    age integer," + 
+				"    street varchar(45)," + 
+				"    apartment_number integer," + 
+				"    city varchar(45)," + 
+				"    state varchar(45)," + 
+				"    zip integer," + 
+				"    tel_home varchar(45)," + 
+				"    tel_office varchar(45)," + 
+				"    CONSTRAINT email_unique UNIQUE (email))";
+		PowerMockito.when(PropertyUtil.getPropValues()).thenReturn(p);
+		Connection conn = DatabaseUtil.getConnection();
+		Statement st = conn.createStatement();
+		st.execute(CreateQuery);
+		st.execute("create sequence passenger_seq MINVALUE 1 start with 1 increment by 1 cache 20");
+		st.executeUpdate("insert into passenger values(5, 'abc@abc.com', 'password', 'abc', 'abc', 'MALE', '0000', 10, 'Illinois Ave', 30, 'St Charles', 'IL', 60174, '2132434344', '887388733')");
+		conn.commit();
+	}
+	
+	@Test
+	public void pLoginTest1() throws FileException, DatabaseException {
+		assertNotNull(pdl.passengerLogin("abc@abc.com", "password"));
+	}
+
+	@Test
+	public void pLoginTest2() throws FileException, DatabaseException {
+		assertNull(pdl.passengerLogin("abc@abc.c", "password"));
+	}
+	
+	@Test
+	public void gpByEmailTest1() throws FileException, DatabaseException {
+		assertNotNull(pdl.getPassengerByEmail("abc@abc.com"));
+	}
+	
+	@Test
+	public void gpByEmailTest2() throws FileException, DatabaseException {
+		assertNull(pdl.getPassengerByEmail("abc@abc.c"));
+	}
+	
+	@Test
+	public void pRegTest1() throws DatabaseException, FileException {
+		Passenger p =new Passenger("aabbcc", "apolis", "rjt", "bcd@bcd.com", Gender.FEMALE);
+		assertEquals(p, pdl.passengerRegister(p));
+	}
+	
+	@Test(expected=DatabaseException.class)
+	public void pRegTest2() throws DatabaseException, FileException {
+		Passenger p =new Passenger("aabbcc", "apolis", "rjt", "bcd@bcd.com", Gender.FEMALE);
+		pdl.passengerRegister(p);
+	}
+	
+	@Test
+	public void uPassenTest1() throws FileException, DatabaseException {
+		Passenger p =new Passenger("abc", "apols", "rt", "bcd@bcd.com", Gender.MALE);
+		assertEquals(1, pdl.updatePassenger(p));
+	}
+	
+	@Test(expected=DatabaseException.class)
+	public void uPassenTest2() throws FileException, DatabaseException {
+		Passenger p =new Passenger("abc", "apols", "rt", "bcd@bcd.co", Gender.MALE);
+		assertEquals(0, pdl.updatePassenger(p));
+	}
+	
+
+}
