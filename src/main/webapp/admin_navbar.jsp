@@ -13,9 +13,6 @@
       		</li>
     		<li class="nav-item active">
     			<a class="nav-link" href="allhistory">History</a>
-    			<!-- change start -->
-    			<a class="nav-link" href="allfuture">Future</a>
-    			<!-- change end -->
       		</li>
       	</c:if>
     </ul>
