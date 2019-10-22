@@ -11,6 +11,11 @@
     		<li class="nav-item active">
     			<a class="nav-link" href="passenger-history">History</a>
       		</li>
+      		<!-- change start -->
+    		<li class="nav-item active">
+    			<a class="nav-link" href="passenger-future">Future</a>
+      		</li>
+    		<!-- change end -->
       	</c:if>
     </ul>
     <c:if test="${sessionScope.passengerEmail==null}">
