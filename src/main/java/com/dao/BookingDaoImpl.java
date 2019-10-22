@@ -26,7 +26,7 @@ public class BookingDaoImpl implements BookingDao{
 			set = ps.executeQuery();
 			while (set.next()) {
 				Booking booking = new Booking(set.getInt("booking_id"), passengerId, 
-						set.getInt("flight_id"), set.getInt("seat_number"), set.getInt("baggage"), 
+						set.getInt("flight_id"), set.getString("seat_number"), set.getInt("baggage"), 
 						EnumUtil.stringToFlightClass(set.getString("class")), 
 						EnumUtil.stringToBookingStatus(set.getString("status")));
 				bookingList.add(booking);
@@ -48,7 +48,7 @@ public class BookingDaoImpl implements BookingDao{
 			set = ps.executeQuery();
 			while (set.next()) {
 				Booking booking = new Booking(set.getInt("booking_id"), set.getInt("passenger_id"), 
-						set.getInt("flight_id"), set.getInt("seat_number"), set.getInt("baggage"), 
+						set.getInt("flight_id"), set.getString("seat_number"), set.getInt("baggage"), 
 						EnumUtil.stringToFlightClass(set.getString("class")), 
 						EnumUtil.stringToBookingStatus(set.getString("status")));
 				bookingList.add(booking);
@@ -73,7 +73,7 @@ public class BookingDaoImpl implements BookingDao{
 				PreparedStatement queryPS = conn.prepareStatement(querySql);) {
 			insertPS.setInt(1, booking.getPassangerId());
 			insertPS.setInt(2, booking.getFlightId());
-			insertPS.setInt(3, booking.getSeatNumber());
+			insertPS.setString(3, booking.getSeatNumber());
 			insertPS.setInt(4, booking.getBaggage());
 			insertPS.setString(5, booking.getFlightClass().toString());
 			insertPS.setString(6, booking.getStatus().toString());
@@ -110,7 +110,7 @@ public class BookingDaoImpl implements BookingDao{
 			set = ps.executeQuery();
 			while (set.next()) {
 				booking = new Booking(bookingId, set.getInt("passenger_id"), 
-						set.getInt("flight_id"), set.getInt("seat_number"), set.getInt("baggage"), 
+						set.getInt("flight_id"), set.getString("seat_number"), set.getInt("baggage"), 
 						EnumUtil.stringToFlightClass(set.getString("class")), 
 						EnumUtil.stringToBookingStatus(set.getString("status")));
 			}
@@ -134,7 +134,7 @@ public class BookingDaoImpl implements BookingDao{
 				throw new InputException("Invalid booking operation.");
 			}
 			ps.setInt(1, booking.getFlightId());
-			ps.setInt(2, booking.getSeatNumber());
+			ps.setString(2, booking.getSeatNumber());
 			ps.setInt(3, booking.getBaggage());
 			ps.setString(4, booking.getFlightClass().toString());
 			ps.setString(5, booking.getStatus().toString());

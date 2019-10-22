@@ -4,7 +4,7 @@ public class Booking {
 	private int bookingId;
 	private int passangerId;
 	private int flightId;
-	private int seatNumber;
+	private String seatNumber;
 	private int baggage;
 	private FlightClass flightClass;
 	private BookingStatus status;
@@ -13,7 +13,7 @@ public class Booking {
 		super();
 	}
 	
-	public Booking(int passangerId, int flightId, int seatNumber, int baggage, FlightClass flightClass,
+	public Booking(int passangerId, int flightId, String seatNumber, int baggage, FlightClass flightClass,
 			BookingStatus status) {
 		super();
 		this.passangerId = passangerId;
@@ -24,7 +24,7 @@ public class Booking {
 		this.status = status;
 	}
 
-	public Booking(int bookingId, int passangerId, int flightId, int seatNumber, int baggage, FlightClass flightClass,
+	public Booking(int bookingId, int passangerId, int flightId, String seatNumber, int baggage, FlightClass flightClass,
 			BookingStatus status) {
 		super();
 		this.bookingId = bookingId;
@@ -60,11 +60,11 @@ public class Booking {
 		this.flightId = flightId;
 	}
 
-	public int getSeatNumber() {
+	public String getSeatNumber() {
 		return seatNumber;
 	}
 
-	public void setSeatNumber(int seatNumber) {
+	public void setSeatNumber(String seatNumber) {
 		this.seatNumber = seatNumber;
 	}
 
