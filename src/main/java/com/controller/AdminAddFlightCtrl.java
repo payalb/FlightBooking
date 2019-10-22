@@ -16,8 +16,11 @@ import com.dao.FlightDao;
 import com.dao.FlightDaoImpl;
 import com.dao.FlightSeatDao;
 import com.dao.FlightSeatDaoImpl;
+import com.dao.SeatDao;
+import com.dao.SeatDaoImpl;
 import com.dto.Flight;
 import com.dto.FlightSeat;
+import com.dto.Seat;
 import com.exception.DatabaseException;
 import com.exception.FileException;
 import com.exception.InputException;
@@ -29,7 +32,8 @@ public class AdminAddFlightCtrl extends HttpServlet {
 
 	FlightDao flightDao = new FlightDaoImpl();
 	FlightSeatDao flightSeatDao = new FlightSeatDaoImpl();
-
+	SeatDao seatDao = new SeatDaoImpl();
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -66,10 +70,24 @@ public class AdminAddFlightCtrl extends HttpServlet {
 				} else {
 					FlightSeat flightSeat = new FlightSeat(flightId, businessCap, firstCap, economyCap, 0);
 					int row = flightSeatDao.addFlightSeat(flightSeat);
+					
+					
 					if (row <= 0) {
 						throw new DatabaseException("Fails to insert the seat information.");
-					} else {
-						response.sendRedirect(request.getContextPath() + "/admin_index");
+					} 
+					
+					else {
+						
+						//change start
+						int row2=seatDao.addSeats(flightId, firstCap, businessCap, economyCap);
+						if (row2 <= 0) {
+							throw new DatabaseException("Fails to insert the seat information.");
+						}else {
+							response.sendRedirect(request.getContextPath() + "/admin_index");
+						}//
+						
+						//original
+						//response.sendRedirect(request.getContextPath() + "/admin_index");
 					}
 				}
 			} else {

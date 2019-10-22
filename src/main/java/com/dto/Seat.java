@@ -7,14 +7,12 @@ package com.dto;
  */
 
 public class Seat {
-	private String seatId; //11A
+	private String seatId; //String 11A starting row 1
 	private int flightId;
-	private FlightClass flightClass;
-	private SeatStatus seatStatus;
-	private SeatLocation seatLocation;
-	
-	
-	
+	private FlightClass flightClass; // enum firstclass, businessclass, economyclass
+	private SeatStatus seatStatus;  //enum available, unavailable
+	private SeatLocation seatLocation;   //enum window, aisle, others
+		
 	
 	public String getSeatId() {
 		return seatId;

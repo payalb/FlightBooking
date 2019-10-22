@@ -15,6 +15,8 @@ import com.dao.BookingDao;
 import com.dao.BookingDaoImpl;
 import com.dao.FlightSeatDao;
 import com.dao.FlightSeatDaoImpl;
+import com.dao.SeatDao;
+import com.dao.SeatDaoImpl;
 import com.dto.Booking;
 import com.dto.BookingStatus;
 import com.dto.FlightClass;
@@ -31,7 +33,9 @@ public class BookFlightCtrl extends HttpServlet {
 	BookingDao bookingDao = new BookingDaoImpl();
 	FlightSeatDao flightSeatDao = new FlightSeatDaoImpl();
 	List<Booking> bookings = new ArrayList<Booking>();
-
+	///n
+	SeatDao seatDao = new SeatDaoImpl();///e
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -57,7 +61,8 @@ public class BookFlightCtrl extends HttpServlet {
 		Integer firstLeft = FormatUtil.strToInteger(request.getParameter("firstLeft"));
 		Integer economyLeft = FormatUtil.strToInteger(request.getParameter("economyLeft"));
 		Integer oldVersion = FormatUtil.strToInteger(request.getParameter("oldVersion"));
-
+		///n
+		int[] tickets=new int[3];///e  first business economy
 		try {
 			if (flightId == null || busiBaggage == null || businessLeft == null 
 					|| firstLeft == null || economyLeft == null || oldVersion == null) {
@@ -69,8 +74,11 @@ public class BookFlightCtrl extends HttpServlet {
 			}
 
 			for (int i = 0; i < business; i++) {
-				Booking booking = new Booking(passengerId, flightId, Integer.parseInt(1 + "" + businessLeft--),
+				///m     
+				Booking booking = new Booking(passengerId, flightId,"",
 						busiBaggage, FlightClass.BUSINESSCLASS, BookingStatus.RESERVED);
+				businessLeft--;
+				tickets[1]++;       ///e
 				int bookingId = bookingDao.BookingFlight(booking);
 				if (bookingId <= 0) {
 					throw new DatabaseException("Cannot insert booking information.");
@@ -85,8 +93,11 @@ public class BookFlightCtrl extends HttpServlet {
 			}
 
 			for (int i = 0; i < firstClass; i++) {
-				Booking booking = new Booking(passengerId, flightId, Integer.parseInt(2 + "" + firstLeft--),
+				///m
+				Booking booking = new Booking(passengerId, flightId,"",
 						firstBaggage, FlightClass.FIRSTCLASS, BookingStatus.RESERVED);
+				firstLeft--;   
+				tickets[0]++; ///e
 				int bookingId = bookingDao.BookingFlight(booking);
 				if (bookingId <= 0) {
 					throw new DatabaseException("Cannot insert booking information.");
@@ -101,8 +112,12 @@ public class BookFlightCtrl extends HttpServlet {
 			}
 
 			for (int i = 0; i < economy; i++) {
-				Booking booking = new Booking(passengerId, flightId, Integer.parseInt(3 + "" + economyLeft--),
+				///m
+				Booking booking = new Booking(passengerId, flightId, "",
 						econoBaggage, FlightClass.ECONOMYCLASS, BookingStatus.RESERVED);
+				economyLeft--;
+				tickets[2]++;
+				 ///e
 				int bookingId = bookingDao.BookingFlight(booking);
 				if (bookingId <= 0) {
 					throw new DatabaseException("Cannot insert booking information.");
@@ -116,6 +131,7 @@ public class BookFlightCtrl extends HttpServlet {
 				}
 			}
 			session.setAttribute("bookingList", bookings);
+			session.setAttribute("tickets", tickets);
 			System.out.println( bookings.size());
 			request.getRequestDispatcher("/payment.jsp").forward(request, response);
 			//response.sendRedirect(request.getContextPath() + "/passenger-history");

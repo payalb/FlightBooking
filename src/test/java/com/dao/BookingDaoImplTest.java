@@ -80,7 +80,7 @@ public class BookingDaoImplTest {
 	
 	@Test
 	public void BookFlitest1() throws FileException, DatabaseException {
-		Booking b = new Booking( 1, 1, 1, 1, FlightClass.FIRSTCLASS, BookingStatus.PAID);
+		Booking b = new Booking( 1, 1, "", 1, FlightClass.FIRSTCLASS, BookingStatus.PAID);
 		assertNotNull(bdi.BookingFlight(b));
 	}	
 	
@@ -96,19 +96,19 @@ public class BookingDaoImplTest {
 	
 	@Test
 	public void updateBooktest1() throws FileException, DatabaseException, SQLException, InputException {
-		Booking b = new Booking( 1, 1, 1, 1, 1, FlightClass.FIRSTCLASS, BookingStatus.PAID);
+		Booking b = new Booking( 1, 1, "", 1, FlightClass.FIRSTCLASS, BookingStatus.PAID);
 		assertNotNull(bdi.updateBooking(b));
 	}	
 	
 	@Test(expected=InputException.class)
 	public void updateBooktest2() throws FileException, DatabaseException, SQLException, InputException {
-		Booking b = new Booking( 1, 1, 1, 1, FlightClass.FIRSTCLASS, BookingStatus.PAID);
+		Booking b = new Booking( 1, 1, "", 1, FlightClass.FIRSTCLASS, BookingStatus.PAID);
 		assertNotNull(bdi.updateBooking(b));
 	}	
 	
 	@Test(expected=DatabaseException.class)
 	public void updateBooktest3() throws FileException, DatabaseException, SQLException, InputException {
-		Booking b = new Booking( 4, 1, 1, 1, 1, FlightClass.FIRSTCLASS, BookingStatus.CANCELLED);
+		Booking b = new Booking( 4, 1, "",  1, FlightClass.FIRSTCLASS, BookingStatus.CANCELLED);
 		assertNotNull(bdi.updateBooking(b));
 	}	
 	
