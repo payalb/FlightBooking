@@ -48,7 +48,7 @@ public class BookingDaoImplTest {
 				"    booking_id integer primary key not null," + 
 				"    passenger_id integer not null," + 
 				"    flight_id integer not null," + 
-				"    seat_number integer not null," + 
+				"    seat_number varchar(10) not null," + 
 				"    baggage integer not null," + 
 				"    class varchar(15) not null," + 
 				"    status varchar(20) not null," + 
@@ -57,9 +57,9 @@ public class BookingDaoImplTest {
 		PowerMockito.when(PropertyUtil.getPropValues()).thenReturn(p);
 		Connection conn = DatabaseUtil.getConnection();
 		Statement st = conn.createStatement();
-		st.execute("create sequence booking_seq MINVALUE 0 start with 1 increment by 1 cache 20");
+		st.execute("create sequence booking_seq start with 1 increment by 1 cache 20");
 		st.execute(query);
-		st.execute("insert into booking values(5,5,5,5,5,'FIRSTCLASS','PAID')");
+		st.execute("insert into booking values(5,5,5,'5A',5,'FIRSTCLASS','PAID')");
 		conn.commit();
 	}
 	
@@ -96,19 +96,19 @@ public class BookingDaoImplTest {
 	
 	@Test
 	public void updateBooktest1() throws FileException, DatabaseException, SQLException, InputException {
-		Booking b = new Booking( 1, 1, "", 1, FlightClass.FIRSTCLASS, BookingStatus.PAID);
+		Booking b = new Booking( 5, 1, 5, "1A", 1, FlightClass.FIRSTCLASS, BookingStatus.PAID);
 		assertNotNull(bdi.updateBooking(b));
 	}	
 	
 	@Test(expected=InputException.class)
 	public void updateBooktest2() throws FileException, DatabaseException, SQLException, InputException {
-		Booking b = new Booking( 1, 1, "", 1, FlightClass.FIRSTCLASS, BookingStatus.PAID);
+		Booking b = new Booking( 1, 1, "1A", 1, FlightClass.FIRSTCLASS, BookingStatus.PAID);
 		assertNotNull(bdi.updateBooking(b));
 	}	
 	
 	@Test(expected=DatabaseException.class)
 	public void updateBooktest3() throws FileException, DatabaseException, SQLException, InputException {
-		Booking b = new Booking( 4, 1, "",  1, FlightClass.FIRSTCLASS, BookingStatus.CANCELLED);
+		Booking b = new Booking( 4, 4, 1, "1A", 1, FlightClass.FIRSTCLASS, BookingStatus.CANCELLED);
 		assertNotNull(bdi.updateBooking(b));
 	}	
 	
