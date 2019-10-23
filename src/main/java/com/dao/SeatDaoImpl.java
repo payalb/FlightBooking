@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import com.dto.FlightClass;
 import com.dto.Seat;
@@ -253,23 +254,22 @@ public class SeatDaoImpl implements SeatDao {
 	}
 
 	@Override
-	public ArrayList<Seat> getAvailableSeats(int flightId) throws DatabaseException, FileException, InputException {
-		ArrayList<Seat> seats=new ArrayList<>();
+	public HashSet<String> getAvailableSeats(int flightId) throws DatabaseException, FileException, InputException {
+		HashSet<String> seats=new HashSet<>();
 		ResultSet set = null;
-		Seat seat = null;
+		//Seat seat = null;
 
-		String sql = "select seat_id, flight_id, class,  seat_status, seat_location "
-				+ "from seat where flight_id = ? and seat_status='AVAILABLE'";
+		String sql = "select seat_id from seat where flight_id = ? and seat_status='AVAILABLE'";
 		try (Connection conn = DatabaseUtil.getConnection(); PreparedStatement ps = conn.prepareStatement(sql);) {
 			ps.setInt(1, flightId);
 			set = ps.executeQuery();
 
 			while (set.next()) {
-				seat = new Seat(set.getString("seat_id"), flightId, 
+				/*seat = new Seat(set.getString("seat_id"), flightId, 
 						EnumUtil.stringToFlightClass(set.getString("class")),
 						EnumUtil.stringToSeatStatus(set.getString("seat_status")),
-						EnumUtil.stringToSeatLocation(set.getString("seat_location")));
-				seats.add(seat);
+						EnumUtil.stringToSeatLocation(set.getString("seat_location")));*/
+				seats.add(set.getString("seat_id"));
 			}
 			if (set != null)
 				set.close();
@@ -279,7 +279,7 @@ public class SeatDaoImpl implements SeatDao {
 		return seats;
 	}
 	
-	/*
+	
 	  public static void main(String[] args) throws DatabaseException,
 	  	FileException, InputException {
 	  //System.out.println(System.getProperty("java.class.path"));
@@ -290,15 +290,15 @@ public class SeatDaoImpl implements SeatDao {
 	//		 }
 	//		 System.out.println();
 	//	 }
-		  
+		 // System.out.println(impl.getAvailableSeats(1).size());
 		//  System.out.println(impl.addSeats(1, 12, 13, 26));
-	  //Seat seat=impl.getSeatById("6B", 1);
+	  Seat seat=impl.getSeatById("6B", 1);
 		 
-	  //System.out.println(impl.alterSeatStatus(seat));
+	  System.out.println(impl.alterSeatStatus(seat));
 	  //System.out.println(impl.getSeatById("6B", 1).toString());
 	 //System.out.println(impl.deleteFlightSeats(1)); 
 	 
 	  }
 
-*/
+
 }

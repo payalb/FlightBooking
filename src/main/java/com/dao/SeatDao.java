@@ -1,6 +1,7 @@
 package com.dao;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import javax.swing.JList.DropLocation;
 
@@ -26,7 +27,7 @@ public interface SeatDao {
 	//drop all the seats for a flight
 	public int deleteFlightSeats(int flightId)throws DatabaseException, FileException, InputException;
 
-	public ArrayList<Seat> getAvailableSeats(int flightId)throws DatabaseException, FileException, InputException;
+	public HashSet<String> getAvailableSeats(int flightId)throws DatabaseException, FileException, InputException;
 	public ArrayList<ArrayList<String>> getSeatLayout(int flightId, int firstCap, int businessCap,  int economyCap);
 	
 

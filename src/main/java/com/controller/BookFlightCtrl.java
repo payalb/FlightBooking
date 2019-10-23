@@ -2,6 +2,7 @@ package com.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -11,12 +12,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.dao.AirplaneDao;
+import com.dao.AirplaneDaoImpl;
 import com.dao.BookingDao;
 import com.dao.BookingDaoImpl;
+import com.dao.FlightDao;
+import com.dao.FlightDaoImpl;
 import com.dao.FlightSeatDao;
 import com.dao.FlightSeatDaoImpl;
 import com.dao.SeatDao;
 import com.dao.SeatDaoImpl;
+import com.dto.Airplane;
 import com.dto.Booking;
 import com.dto.BookingStatus;
 import com.dto.FlightClass;
@@ -31,9 +37,12 @@ public class BookFlightCtrl extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	BookingDao bookingDao = new BookingDaoImpl();
+
 	FlightSeatDao flightSeatDao = new FlightSeatDaoImpl();
 	List<Booking> bookings = new ArrayList<Booking>();
 	///n
+	FlightDao flightDao=new FlightDaoImpl();
+	AirplaneDao airplaneDao=new AirplaneDaoImpl();
 	SeatDao seatDao = new SeatDaoImpl();///e
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -62,8 +71,16 @@ public class BookFlightCtrl extends HttpServlet {
 		Integer economyLeft = FormatUtil.strToInteger(request.getParameter("economyLeft"));
 		Integer oldVersion = FormatUtil.strToInteger(request.getParameter("oldVersion"));
 		///n
-		int[] tickets=new int[3];///e  first business economy
-		try {
+		int[] tickets=new int[3];
+		
+		
+		///e  first business economy
+		try {///n
+			Airplane plane= airplaneDao.getAirplaneById(flightDao.getFlightById(flightId).getAirplaneId());
+			ArrayList<ArrayList<String>> layout=seatDao.getSeatLayout(flightId, plane.getFirstClassCap(), 
+					plane.getBusinessClassCap(), plane.getEconomyClassCap());
+			
+			///e
 			if (flightId == null || busiBaggage == null || businessLeft == null 
 					|| firstLeft == null || economyLeft == null || oldVersion == null) {
 				throw new InputException("Invalid input information during booking.");
@@ -131,9 +148,17 @@ public class BookFlightCtrl extends HttpServlet {
 				}
 			}
 			session.setAttribute("bookingList", bookings);
-			session.setAttribute("tickets", tickets);
+			
 			System.out.println( bookings.size());
-			request.getRequestDispatcher("/payment.jsp").forward(request, response);
+			///m  /payment.jsp
+			session.setAttribute("plane", plane);
+			session.setAttribute("layout", layout);
+			session.setAttribute("tickets", tickets);
+			HashSet<String> availableSeat=seatDao.getAvailableSeats(flightId);
+			System.out.println(availableSeat.size());
+			session.setAttribute("availableSeat", availableSeat);
+			request.getRequestDispatcher("/select_seat.jsp").forward(request, response);
+			//e
 			//response.sendRedirect(request.getContextPath() + "/passenger-history");
 		} catch (InputException | DatabaseException | FileException e) {
 			response.sendRedirect(request.getContextPath() + "/error?exception=" + e.getMessage());
