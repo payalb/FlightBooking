@@ -27,6 +27,7 @@ import com.exception.InputException;
 @WebServlet("/payment")
 public class PaymentCtrl extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	PaymentDao paymentDao = new PaymentDaoImpl();
      
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
@@ -37,20 +38,22 @@ public class PaymentCtrl extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		PaymentDao paymentDao = new PaymentDaoImpl();
+		
 		HttpSession session = request.getSession(false);
+		//System.out.println(request.getSession(true)==null);
+		//session.setAttribute("a", "somevalue");
 		if (session == null || session.getAttribute("bookingList") == null) {
 			//System.out.println("Null Booking List");
 			response.sendRedirect("/FlightBooking");
-		}
+		}else {
 		
 		List<Booking> bookingList = (List<Booking>)session.getAttribute("bookingList");	
-		if(bookingList==null)
-		{
-			//System.out.println("Null Booking List");
-			response.sendRedirect("/FlightBooking");
-		}
-		System.out.println(bookingList.size());
+//		if(bookingList==null)
+//		{
+//			//System.out.println("Null Booking List");
+//			response.sendRedirect("/FlightBooking");
+//		}
+		//System.out.println(bookingList.size());
 		for(Booking booking : bookingList) {
 			Payment payment = new Payment();
 			payment.setBooking(booking);
@@ -58,23 +61,26 @@ public class PaymentCtrl extends HttpServlet {
 			payment.setPaymentTime(LocalDateTime.now());			
 			try {
 				if (booking == null || payment.getPaymentAmount() <=0) {
+					//System.out.println("payment = "+ payment.getPaymentAmount());
 					throw new InputException("Invalid input information during making payment.");
+				}else {
+					//System.out.println("checkpoint 1");
+					//why is thhis part not reached?
+					int paymentId = paymentDao.addPayment(payment);
+					//System.out.println("checkpoint 2");
+					payment.setPaymentId(paymentId);
 				}
-				int paymentId = paymentDao.addPayment(payment);
-				payment.setPaymentId(paymentId);
 				
 				
-				
-			}
-				catch(InputException | DatabaseException | FileException | SQLException e) {
-					//throw new InputException("Invalid input information during making payment.");
-					response.sendRedirect(request.getContextPath() + "/error?exception=" + e.getMessage());
-				
+			}catch(InputException | DatabaseException | FileException | SQLException e) {
+				//throw new InputException("Invalid input information during making payment.");
+				response.sendRedirect(request.getContextPath() + "/error?exception=" );//+ e.getMessage());
 			}
 		}
 		
 		response.sendRedirect("/FlightBooking" + "/passenger-history");
-		
+		}
 	}
 
 }
+

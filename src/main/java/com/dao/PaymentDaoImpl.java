@@ -17,11 +17,12 @@ import com.util.DatabaseUtil;
 
 public class PaymentDaoImpl implements PaymentDao {
 
+	BookingDao bookingDao = new BookingDaoImpl();
 	@Override
 	public int addPayment(Payment p) throws SQLException, DatabaseException, FileException, InputException {
 		int paymentId = -1;
 		ResultSet set = null;
-		BookingDao bookingDao = new BookingDaoImpl();
+		//BookingDao bookingDao = new BookingDaoImpl();
 		String sql = "insert into payment(payment_id, passenger_id, booking_id, price, payment_time) "
 				+ "values (nextval('payment_seq'), ?, ?, ?, ?)";
 		try (Connection conn = DatabaseUtil.getConnection();
@@ -31,6 +32,9 @@ public class PaymentDaoImpl implements PaymentDao {
 			ps.setInt(2, p.getBooking().getBookingId());
 			ps.setDouble(3, p.getPaymentAmount());
 			ps.setTimestamp(4, Timestamp.valueOf(p.getPaymentTime()));
+			//
+//			set = ps1.executeQuery();
+//			System.out.println(set.getInt("id"));
 			int row = ps.executeUpdate();
 			if (row == 0) {
 				throw new DatabaseException("Unable to insert payment information.");
@@ -61,7 +65,7 @@ public class PaymentDaoImpl implements PaymentDao {
 	public Payment getPaymentById(int paymentId) throws  FileException, DatabaseException{
 		ResultSet set = null;
 		Payment payment = null;
-		BookingDao bookingDao = new BookingDaoImpl();
+		//BookingDao bookingDao = new BookingDaoImpl();
 		String sql = "select * from payment where payment_id = ?";
 		try (Connection conn = DatabaseUtil.getConnection(); PreparedStatement ps = conn.prepareStatement(sql);) {
 			ps.setInt(1, paymentId);
