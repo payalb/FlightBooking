@@ -38,7 +38,7 @@ public class BookFlightCtrl extends HttpServlet {
 
 	BookingDao bookingDao = new BookingDaoImpl();
 
-	FlightSeatDao flightSeatDao = new FlightSeatDaoImpl();
+	//FlightSeatDao flightSeatDao = new FlightSeatDaoImpl();
 	List<Booking> bookings = new ArrayList<Booking>();
 	///n
 	FlightDao flightDao=new FlightDaoImpl();
@@ -72,14 +72,20 @@ public class BookFlightCtrl extends HttpServlet {
 		Integer oldVersion = FormatUtil.strToInteger(request.getParameter("oldVersion"));
 		///n
 		int[] tickets=new int[3];
+		int[] ticketsLeftVersion=new int[5];
+		ArrayList<ArrayList<String>> layout=new ArrayList<>();
 		
 		
 		///e  first business economy
 		try {///n
 			Airplane plane= airplaneDao.getAirplaneById(flightDao.getFlightById(flightId).getAirplaneId());
-			ArrayList<ArrayList<String>> layout=seatDao.getSeatLayout(flightId, plane.getFirstClassCap(), 
+			layout=seatDao.getSeatLayout(flightId, plane.getFirstClassCap(), 
 					plane.getBusinessClassCap(), plane.getEconomyClassCap());
 			
+			int[] rows=seatDao.getRowsForClasses(flightId, plane.getFirstClassCap(), 
+					plane.getBusinessClassCap(), plane.getEconomyClassCap());
+					request.setAttribute("rows", rows);
+					//System.out.println(rows.toString());
 			///e
 			if (flightId == null || busiBaggage == null || businessLeft == null 
 					|| firstLeft == null || economyLeft == null || oldVersion == null) {
@@ -94,7 +100,7 @@ public class BookFlightCtrl extends HttpServlet {
 				///m     
 				Booking booking = new Booking(passengerId, flightId,"",
 						busiBaggage, FlightClass.BUSINESSCLASS, BookingStatus.RESERVED);
-				businessLeft--;
+				//businessLeft--;
 				tickets[1]++;       ///e
 				int bookingId = bookingDao.BookingFlight(booking);
 				if (bookingId <= 0) {
@@ -102,18 +108,18 @@ public class BookFlightCtrl extends HttpServlet {
 				}
 				booking.setBookingId(bookingId);
 				bookings.add(booking);				
-				FlightSeat seat = new FlightSeat(flightId, businessLeft, firstLeft, economyLeft, oldVersion++);
+			/*	FlightSeat seat = new FlightSeat(flightId, businessLeft, firstLeft, economyLeft, oldVersion++);
 				int row = flightSeatDao.updateFlightSeat(seat);
 				if (row <= 0) {
 					throw new DatabaseException("Cannot update flight seat information.");
-				}
+				}*/
 			}
 
 			for (int i = 0; i < firstClass; i++) {
 				///m
 				Booking booking = new Booking(passengerId, flightId,"",
 						firstBaggage, FlightClass.FIRSTCLASS, BookingStatus.RESERVED);
-				firstLeft--;   
+				//firstLeft--;   
 				tickets[0]++; ///e
 				int bookingId = bookingDao.BookingFlight(booking);
 				if (bookingId <= 0) {
@@ -121,18 +127,15 @@ public class BookFlightCtrl extends HttpServlet {
 				}
 				booking.setBookingId(bookingId);
 				bookings.add(booking);	
-				FlightSeat seat = new FlightSeat(flightId, businessLeft, firstLeft, economyLeft, oldVersion++);
-				int row = flightSeatDao.updateFlightSeat(seat);
-				if (row <= 0) {
-					throw new DatabaseException("Cannot update flight seat information.");
-				}
+				
+				
 			}
 
 			for (int i = 0; i < economy; i++) {
 				///m
 				Booking booking = new Booking(passengerId, flightId, "",
 						econoBaggage, FlightClass.ECONOMYCLASS, BookingStatus.RESERVED);
-				economyLeft--;
+				//economyLeft--;
 				tickets[2]++;
 				 ///e
 				int bookingId = bookingDao.BookingFlight(booking);
@@ -141,22 +144,30 @@ public class BookFlightCtrl extends HttpServlet {
 				}
 				booking.setBookingId(bookingId);
 				bookings.add(booking);	
-				FlightSeat seat = new FlightSeat(flightId, businessLeft, firstLeft, economyLeft, oldVersion++);
+				/*FlightSeat seat = new FlightSeat(flightId, businessLeft, firstLeft, economyLeft, oldVersion++);
 				int row = flightSeatDao.updateFlightSeat(seat);
 				if (row <= 0) {
 					throw new DatabaseException("Cannot update flight seat information.");
-				}
+				}*/
 			}
+			session.removeAttribute("bookingList");
 			session.setAttribute("bookingList", bookings);
+			ticketsLeftVersion[0]= flightId;
+			ticketsLeftVersion[1]= businessLeft;
+			ticketsLeftVersion[2]= firstLeft;
+			ticketsLeftVersion[3]= economyLeft;
+			ticketsLeftVersion[4]= oldVersion;
+			session.setAttribute("ticketsLeftVersion", ticketsLeftVersion);
 			
-			System.out.println( bookings.size());
+			//System.out.println( bookings.size());
 			///m  /payment.jsp
-			session.setAttribute("plane", plane);
-			session.setAttribute("layout", layout);
+			request.setAttribute("plane", plane);
+			request.setAttribute("layout", layout);
 			session.setAttribute("tickets", tickets);
 			HashSet<String> availableSeat=seatDao.getAvailableSeats(flightId);
-			System.out.println(availableSeat.size());
-			session.setAttribute("availableSeat", availableSeat);
+			//System.out.println(availableSeat.size());
+			request.setAttribute("availableSeat", availableSeat);
+			
 			request.getRequestDispatcher("/select_seat.jsp").forward(request, response);
 			//e
 			//response.sendRedirect(request.getContextPath() + "/passenger-history");

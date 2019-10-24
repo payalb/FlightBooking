@@ -30,5 +30,6 @@ public interface SeatDao {
 	public HashSet<String> getAvailableSeats(int flightId)throws DatabaseException, FileException, InputException;
 	public ArrayList<ArrayList<String>> getSeatLayout(int flightId, int firstCap, int businessCap,  int economyCap);
 	
+	public int[] getRowsForClasses(int flightId, int firstCap, int businessCap,  int economyCap);
 
 }

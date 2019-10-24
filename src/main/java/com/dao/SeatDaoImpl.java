@@ -174,7 +174,13 @@ public class SeatDaoImpl implements SeatDao {
 		}
 		return row;
 	}
-
+	@Override
+	public int[] getRowsForClasses(int flightId, int firstCap, int businessCap, int economyCap) {
+		int[] rows = { (int) Math.ceil((double)firstCap / COLFIRST), 
+				(int) Math.ceil((double)businessCap / COLBUSINESS),
+				(int) Math.ceil((double)economyCap / COLECONOMY) };
+		return rows;
+	}
 	@Override
 	public ArrayList<ArrayList<String>> getSeatLayout(int flightId, int firstCap, int businessCap, int economyCap) {
 		ArrayList<ArrayList<String>> layout= new ArrayList<>();
@@ -253,6 +259,7 @@ public class SeatDaoImpl implements SeatDao {
 		return layout;
 	}
 
+	
 	@Override
 	public HashSet<String> getAvailableSeats(int flightId) throws DatabaseException, FileException, InputException {
 		HashSet<String> seats=new HashSet<>();
@@ -299,6 +306,8 @@ public class SeatDaoImpl implements SeatDao {
 	 //System.out.println(impl.deleteFlightSeats(1)); 
 	 
 	  }
+
+
 
 
 }
