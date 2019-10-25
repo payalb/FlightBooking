@@ -19,40 +19,38 @@ border:1px;
 display:inline-block;
 text-align:center;
 }
-
+#sect{
+padding-bottom:15px;
+}
 .seatLine{
 text-align:center;
 }
 #sect:nth-of-type(1){
-background-color:yellow;
+background-color:rgba(152,250,0,0.1);
+
 }
 #sect:nth-of-type(2){
-background-color:grey;
+background-color:rgba(152,0,50,0.1);
+
 }
 #sect:nth-of-type(3){
-background-color:pink;
+background-color:rgba(0,152,50,0.1);
+
+
 }
 .available,.unavailable{
 width:30px; height:30px;
 
 }
 form{text-align:center;}
+#bookBtn{
+width:300px;
+}
 </style>
 </head>
 <body>
 	<jsp:include page="navbar.jsp"></jsp:include>
 
-	<c:forEach items="${bookingList}" var="booking">
-		<tr>
-			<td>${booking.getFlightId()}</td>
-			<td>${booking.getBookingId()}</td>
-			<td>${booking.getFlightClass().toString()}</td>
-			<td>${booking.getBaggage()}</td>
-			<td>${booking.getSeatNumber()}</td>
-			<td>${booking.getStatus().toString()}</td>
-			<c:set value="${paymentAmount+1 }" var="paymentAmount" />
-		</tr>
-	</c:forEach>
 	<% 
 	HashSet<String> availableSeats=(HashSet<String>)request.getAttribute("availableSeat");
 	ArrayList<ArrayList<String>> layout=(ArrayList<ArrayList<String>>) request.getAttribute("layout");
@@ -62,7 +60,7 @@ form{text-align:center;}
 	classes[1]="Business Class";
 	classes[2]="Economy Class";
 	int sec=1;
-	%> <div id="sect"><%=classes[0]%> <% 
+	%> <div id="sect"><h5><%=classes[0]%></h5> <% 
 	for(int i=0;i<layout.size();i++){
 		
 		int row=0;
@@ -74,15 +72,16 @@ form{text-align:center;}
 				%><span class="AC"> <%=row %> </span><% 
 				}
 			if(code.equals("AL")){	
-				sec++;
+				
 				%></div><p></p><div id="sect">
 				<%if(sec==1||sec==2){ %>
 				
-				<%=classes[sec]%>
+				<h5> <%=classes[sec]%> </h5>
 				
 				
 				<% 
 				}
+				sec++;
 				}
 			if(code.split("-").length==3){
 				String seatId=code.split("-")[2];

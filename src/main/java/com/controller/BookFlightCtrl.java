@@ -39,7 +39,7 @@ public class BookFlightCtrl extends HttpServlet {
 	BookingDao bookingDao = new BookingDaoImpl();
 
 	//FlightSeatDao flightSeatDao = new FlightSeatDaoImpl();
-	List<Booking> bookings = new ArrayList<Booking>();
+	
 	///n
 	FlightDao flightDao=new FlightDaoImpl();
 	AirplaneDao airplaneDao=new AirplaneDaoImpl();
@@ -47,7 +47,7 @@ public class BookFlightCtrl extends HttpServlet {
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		List<Booking> bookings = new ArrayList<Booking>();
 		HttpSession session = request.getSession(false);
 		if (session == null || session.getAttribute("passengerId") == null) {
 			response.sendRedirect(request.getContextPath() + "/");
@@ -167,7 +167,7 @@ public class BookFlightCtrl extends HttpServlet {
 			HashSet<String> availableSeat=seatDao.getAvailableSeats(flightId);
 			//System.out.println(availableSeat.size());
 			request.setAttribute("availableSeat", availableSeat);
-			
+			//System.out.println(bookings.size());
 			request.getRequestDispatcher("/select_seat.jsp").forward(request, response);
 			//e
 			//response.sendRedirect(request.getContextPath() + "/passenger-history");

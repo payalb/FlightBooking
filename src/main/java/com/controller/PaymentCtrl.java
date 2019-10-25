@@ -74,6 +74,10 @@ public class PaymentCtrl extends HttpServlet {
 				
 			}catch(InputException | DatabaseException | FileException | SQLException e) {
 				//throw new InputException("Invalid input information during making payment.");
+				if(session.getAttribute("bookingList") != null) {
+					session.removeAttribute("bookingList");
+					session.invalidate();
+				}	
 				response.sendRedirect(request.getContextPath() + "/error?exception=" );//+ e.getMessage());
 			}
 		}
