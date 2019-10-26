@@ -1,4 +1,4 @@
-package com.controller;
+/*package com.controller;
 
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
@@ -31,4 +31,4 @@ public class RegisterCtrlIntegrationTest {
 		ctrl.doPost(request, response);
 		Mockito.verify(response).sendRedirect("root/");
 	}
-}
+}*/
