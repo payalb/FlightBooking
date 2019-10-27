@@ -22,8 +22,8 @@ public class DatabaseUtilInvalidTest1 {
 	@Test(expected=DatabaseException.class)
 	public void noUrlTest() throws SQLException, FileException, DatabaseException, IOException {	
 		Properties p = new Properties();
-		p.setProperty("jdbc.url", "jdbc:postgresql://postdb.cbfsnbkkeuk9.us-east-2.rds.amazonaws.com:5432/postdb");
-		p.setProperty("jdbc.username","kai");
+		p.setProperty("jdbc.url", "");
+		p.setProperty("jdbc.username","sa");
 		p.setProperty("jdbc.driverClassName","org.postgresql.Driver");
 		p.setProperty("jdbc.password", "");
 		PowerMockito.mockStatic(PropertyUtil.class);

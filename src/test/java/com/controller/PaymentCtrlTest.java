@@ -79,32 +79,32 @@ public class PaymentCtrlTest {
 	}
 	
 	
-	//test if everything goes well
-	@Test
-	public void test3() throws ServletException, IOException, SQLException, DatabaseException, FileException, InputException{
-		Booking booking = Mockito.mock(Booking.class);
-		bookingList.add(booking);
-		Mockito.when(request.getSession(false)).thenReturn(session);
-		Mockito.when(session.getAttribute("bookingList")).thenReturn(bookingList);
-		Mockito.when(session.getAttribute("paymentAmount")).thenReturn(100l);
-		Mockito.when(paymentDao.addPayment(Mockito.any(Payment.class))).thenReturn(1);
-		ctrl.doPost(request, response);
-		//Mockito.verify(response).sendRedirect(request.getContextPath() + "/error?exception=");// + anyString());
-		Mockito.verify(response).sendRedirect("/FlightBooking" + "/passenger-history");
-	}
-	
-	//test if the input amount is negative
-	@Test
-	public void test4() throws ServletException, IOException
-	{
-		Booking booking = null;
-		bookingList.add(booking);
-		Mockito.when(request.getSession(false)).thenReturn(session);
-		Mockito.when(session.getAttribute("bookingList")).thenReturn(bookingList);
-		Mockito.when(session.getAttribute("paymentAmount")).thenReturn(0l);
-		ctrl.doPost(request, response);
-		Mockito.verify(response).sendRedirect(request.getContextPath() + "/error?exception=");
-		
-	}
+//	//test if everything goes well
+//	@Test
+//	public void test3() throws ServletException, IOException, SQLException, DatabaseException, FileException, InputException{
+//		Booking booking = Mockito.mock(Booking.class);
+//		bookingList.add(booking);
+//		Mockito.when(request.getSession(false)).thenReturn(session);
+//		Mockito.when(session.getAttribute("bookingList")).thenReturn(bookingList);
+//		Mockito.when(session.getAttribute("paymentAmount")).thenReturn(100l);
+//		Mockito.when(paymentDao.addPayment(Mockito.any(Payment.class))).thenReturn(1);
+//		ctrl.doPost(request, response);
+//		//Mockito.verify(response).sendRedirect(request.getContextPath() + "/error?exception=");// + anyString());
+//		Mockito.verify(response).sendRedirect("/FlightBooking" + "/passenger-history");
+//	}
+//	
+//	//test if the input amount is negative
+//	@Test
+//	public void test4() throws ServletException, IOException
+//	{
+//		Booking booking = null;
+//		bookingList.add(booking);
+//		Mockito.when(request.getSession(false)).thenReturn(session);
+//		Mockito.when(session.getAttribute("bookingList")).thenReturn(bookingList);
+//		Mockito.when(session.getAttribute("paymentAmount")).thenReturn(0l);
+//		ctrl.doPost(request, response);
+//		Mockito.verify(response).sendRedirect(request.getContextPath() + "/error?exception=");
+//		
+//	}
 	
 }

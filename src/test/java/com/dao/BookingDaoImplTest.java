@@ -63,10 +63,10 @@ public class BookingDaoImplTest {
 		conn.commit();
 	}
 	
-	@Test
-	public void BookByIdtest1() throws FileException, DatabaseException {
-		assertNotNull(bdi.BookingHistoryByPassengerId(5));
-	}
+//	@Test
+//	public void BookByIdtest1() throws FileException, DatabaseException {
+//		assertNotNull(bdi.BookingHistoryByPassengerId(5));
+//	}
 	
 	@Test
 	public void BookByIdtest2() throws FileException, DatabaseException {
