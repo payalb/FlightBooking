@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +24,28 @@ public class BookingDaoImpl implements BookingDao{
 	SeatDao seatdao = new SeatDaoImpl();
 
 	@Override
+	public List<Booking> FutureBookingByPassengerId(int passengerId) throws FileException, DatabaseException {
+		List<Booking> list = this.BookingHistoryByPassengerId(passengerId);
+		List<Booking> futureList = new ArrayList<>();
+		ResultSet set = null;
+		String sql = "select * from flight where flight_id = ? AND departure_time > current_timestamp";
+		try(Connection conn = DatabaseUtil.getConnection(); PreparedStatement ps = conn.prepareStatement(sql);){
+			for( Booking book: list ) {
+				ps.setInt(1, book.getFlightId());
+				set = ps.executeQuery();
+				while(set.next()) {
+					futureList.add(book);
+				}
+			}
+			if( set != null )
+				set.close();
+		} catch (SQLException e) {
+			throw new DatabaseException("Unable to get flight information: " + e.getMessage());
+		}
+		return futureList;
+	}
+
+	@Override
 	public List<Booking> BookingHistoryByPassengerId(int passengerId) throws FileException, DatabaseException {
 		List<Booking> bookingList = new ArrayList<>();
 		ResultSet set = null;
@@ -34,12 +57,10 @@ public class BookingDaoImpl implements BookingDao{
 				//
 				int id = set.getInt("flight_id");
 				float[] prices = flightdao.getPrice(id);
-				
 				//
-				
-				Booking booking = new Booking(set.getInt("booking_id"), passengerId, 
-						set.getInt("flight_id"), set.getString("seat_number"), set.getInt("baggage"), 
-						EnumUtil.stringToFlightClass(set.getString("class")), 
+				Booking booking = new Booking(set.getInt("booking_id"), passengerId,
+						set.getInt("flight_id"), set.getString("seat_number"), set.getInt("baggage"),
+						EnumUtil.stringToFlightClass(set.getString("class")),
 						EnumUtil.stringToBookingStatus(set.getString("status")));
 				if(booking.getFlightClass()==FlightClass.FIRSTCLASS) {
 					booking.setPrice(prices[0]);
@@ -68,9 +89,9 @@ public class BookingDaoImpl implements BookingDao{
 		try (Connection conn = DatabaseUtil.getConnection(); PreparedStatement ps = conn.prepareStatement(sql);) {
 			set = ps.executeQuery();
 			while (set.next()) {
-				Booking booking = new Booking(set.getInt("booking_id"), set.getInt("passenger_id"), 
-						set.getInt("flight_id"), set.getString("seat_number"), set.getInt("baggage"), 
-						EnumUtil.stringToFlightClass(set.getString("class")), 
+				Booking booking = new Booking(set.getInt("booking_id"), set.getInt("passenger_id"),
+						set.getInt("flight_id"), set.getString("seat_number"), set.getInt("baggage"),
+						EnumUtil.stringToFlightClass(set.getString("class")),
 						EnumUtil.stringToBookingStatus(set.getString("status")));
 				bookingList.add(booking);
 			}
@@ -89,7 +110,7 @@ public class BookingDaoImpl implements BookingDao{
 				+ "values (nextval('booking_seq'), ?, ?, ?, ?, ?, ?)";
 		String querySql = "select currval('booking_seq') as id ";
 		ResultSet set = null;
-		try (Connection conn = DatabaseUtil.getConnection(); 
+		try (Connection conn = DatabaseUtil.getConnection();
 				PreparedStatement insertPS = conn.prepareStatement(insertSql);
 				PreparedStatement queryPS = conn.prepareStatement(querySql);) {
 			insertPS.setInt(1, booking.getPassangerId());
@@ -121,8 +142,8 @@ public class BookingDaoImpl implements BookingDao{
 	}
 
 	@Override
-	public Booking getBookingById(int bookingId) throws SQLException, DatabaseException, FileException {
-		
+	public Booking getBookingById(int bookingId) throws DatabaseException, FileException {
+
 		Booking booking = null;
 		ResultSet set = null;
 		String sql = "select passenger_id, flight_id, seat_number, baggage, class, status from booking where booking_id = ?";
@@ -130,17 +151,17 @@ public class BookingDaoImpl implements BookingDao{
 			ps.setInt(1, bookingId);
 			set = ps.executeQuery();
 			while (set.next()) {
-				booking = new Booking(bookingId, set.getInt("passenger_id"), 
-						set.getInt("flight_id"), set.getString("seat_number"), set.getInt("baggage"), 
-						EnumUtil.stringToFlightClass(set.getString("class")), 
+				booking = new Booking(bookingId, set.getInt("passenger_id"),
+						set.getInt("flight_id"), set.getString("seat_number"), set.getInt("baggage"),
+						EnumUtil.stringToFlightClass(set.getString("class")),
 						EnumUtil.stringToBookingStatus(set.getString("status")));
 			}
 			if (set != null)
-				set.close();			
+				set.close();
 		} catch (SQLException e) {
 			throw new DatabaseException("Unable to get booking information: " + e.getMessage());
-		}		
-		
+		}
+
 		return booking;
 	}
 
@@ -148,9 +169,9 @@ public class BookingDaoImpl implements BookingDao{
 	public int updateBooking(Booking booking) throws DatabaseException, FileException, InputException {
 		int row = 0;
 		String sql = "update booking set flight_id = ?, seat_number = ?, baggage = ?, class = ?, status  = ? where booking_id = ?";
-		
+
 		try (Connection conn = DatabaseUtil.getConnection(); PreparedStatement ps = conn.prepareStatement(sql);) {
-			
+
 			if (booking.getBookingId() <=0) {
 				throw new InputException("Invalid booking operation.");
 			}
@@ -167,6 +188,48 @@ public class BookingDaoImpl implements BookingDao{
 			conn.commit();
 		} catch (SQLException e) {
 			throw new DatabaseException("Unable to update flight seat information: " + e.getMessage());
+		}
+		return row;
+	}
+
+	@Override
+	public int cancelBooking(Booking booking) throws DatabaseException, FileException, InputException {
+		int row = 0;
+		String sql = " update booking set status = 'CANCELLED' where booking_id = " + booking.getBookingId();
+
+		try (Connection conn = DatabaseUtil.getConnection(); Statement st = conn.createStatement();) {
+
+			if (booking.getBookingId() <=0) {
+				throw new InputException("Invalid booking operation.");
+			}
+			row = st.executeUpdate(sql);
+			if (row == 0) {
+				throw new DatabaseException("Unable to update booking information.");
+			}
+			conn.commit();
+		} catch (SQLException e) {
+			throw new DatabaseException("Unable to update booking information: " + e.getMessage());
+		}
+		return row;
+	}
+
+	@Override
+	public int deleteBooking(Booking booking) throws DatabaseException, FileException, InputException {
+		int row = 0;
+		String sql = " delete from booking where booking_id = " + booking.getBookingId();
+
+		try (Connection conn = DatabaseUtil.getConnection(); Statement st = conn.createStatement();) {
+
+			if (booking.getBookingId() <=0 ) {
+				throw new InputException("Invalid booking operation.");
+			}
+			row = st.executeUpdate(sql);
+			if (row == 0) {
+				throw new DatabaseException("Unable to update booking information.");
+			}
+			conn.commit();
+		} catch (SQLException e) {
+			throw new DatabaseException("Unable to delete booking : " + e.getMessage());
 		}
 		return row;
 	}
