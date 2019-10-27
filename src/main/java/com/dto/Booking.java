@@ -8,6 +8,17 @@ public class Booking {
 	private int baggage;
 	private FlightClass flightClass;
 	private BookingStatus status;
+	private float price;
+
+	
+	
+	public float getPrice() {
+		return price;
+	}
+
+	public void setPrice(float price) {
+		this.price = price;
+	}
 
 	public Booking() {
 		super();

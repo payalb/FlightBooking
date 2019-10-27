@@ -7,7 +7,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.naming.directory.SearchControls;
+
 import com.dto.Booking;
+import com.dto.FlightClass;
+import com.dto.Seat;
 import com.exception.DatabaseException;
 import com.exception.FileException;
 import com.exception.InputException;
@@ -15,6 +19,8 @@ import com.util.DatabaseUtil;
 import com.util.EnumUtil;
 
 public class BookingDaoImpl implements BookingDao{
+	FlightDao flightdao = new FlightDaoImpl();
+	SeatDao seatdao = new SeatDaoImpl();
 
 	@Override
 	public List<Booking> BookingHistoryByPassengerId(int passengerId) throws FileException, DatabaseException {
@@ -25,11 +31,25 @@ public class BookingDaoImpl implements BookingDao{
 			ps.setInt(1, passengerId);
 			set = ps.executeQuery();
 			while (set.next()) {
+				//
 				int id = set.getInt("flight_id");
+				float[] prices = flightdao.getPrice(id);
+				
+				//
+				
 				Booking booking = new Booking(set.getInt("booking_id"), passengerId, 
 						set.getInt("flight_id"), set.getString("seat_number"), set.getInt("baggage"), 
 						EnumUtil.stringToFlightClass(set.getString("class")), 
 						EnumUtil.stringToBookingStatus(set.getString("status")));
+				if(booking.getFlightClass()==FlightClass.FIRSTCLASS) {
+					booking.setPrice(prices[0]);
+				}
+				if(booking.getFlightClass()==FlightClass.BUSINESSCLASS) {
+					booking.setPrice(prices[1]);
+				}
+				if(booking.getFlightClass()==FlightClass.ECONOMYCLASS) {
+					booking.setPrice(prices[2]);
+				}
 				bookingList.add(booking);
 			}
 			if (set != null)
