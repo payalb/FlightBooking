@@ -20,6 +20,7 @@ import com.dao.SeatDao;
 import com.dao.SeatDaoImpl;
 import com.dto.Flight;
 import com.dto.FlightSeat;
+import com.dto.Price;
 import com.dto.Seat;
 import com.exception.DatabaseException;
 import com.exception.FileException;
@@ -53,6 +54,11 @@ public class AdminAddFlightCtrl extends HttpServlet {
 			LocalDate arrDate = FormatUtil.strToLocalDate(request.getParameter("arrDate"));
 			LocalTime arrTime = FormatUtil.strToLocalTime(request.getParameter("arrTime"));
 			
+			//for price of each class
+			Float firstPrice = Float.parseFloat(request.getParameter("firstPrice"));
+			Float businessPrice = Float.parseFloat(request.getParameter("businessPrice"));
+			Float economyPrice = Float.parseFloat(request.getParameter("economyPrice"));
+			
 
 			if (deptCity != null && arrCity != null && airplaneId != null && firstCap != null 
 					&& businessCap != null && economyCap != null && deptDate != null 
@@ -62,9 +68,16 @@ public class AdminAddFlightCtrl extends HttpServlet {
 					throw new InputException("Invalid date and time information during adding flight.");
 				}
 				
+				// add a new flight without price information in it
 				Flight flight = new Flight(LocalDateTime.of(deptDate, deptTime), LocalDateTime.of(arrDate, arrTime),
 						deptCity, arrCity, airplaneId);
 				int flightId = flightDao.addFlight(flight);
+				
+				// set class's price for the flight
+				Price price = new Price(flightId, firstPrice, businessPrice, economyPrice);
+				flightDao.setPrice(price);
+				
+				
 				if (flightId <= 0) {
 					throw new DatabaseException("Fails to insert the flight information.");
 				} else {

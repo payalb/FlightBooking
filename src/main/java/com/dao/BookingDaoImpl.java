@@ -25,6 +25,7 @@ public class BookingDaoImpl implements BookingDao{
 			ps.setInt(1, passengerId);
 			set = ps.executeQuery();
 			while (set.next()) {
+				int id = set.getInt("flight_id");
 				Booking booking = new Booking(set.getInt("booking_id"), passengerId, 
 						set.getInt("flight_id"), set.getString("seat_number"), set.getInt("baggage"), 
 						EnumUtil.stringToFlightClass(set.getString("class")), 

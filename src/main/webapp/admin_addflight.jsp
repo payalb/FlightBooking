@@ -55,6 +55,21 @@
 	          <input type="time" class="form-control" id="arrTime" name="arrTime" required>
 	        </div>
 	      </div>
+	      
+	      <div class="row">
+	      	<div class="col-md-3 mb-3">
+	          <label for="firstPrice">First Class Price</label>
+	          <input type="number" class="form-control" id="firstPrice" name="firstPrice" required>
+	        </div>
+	        <div class="col-md-3 mb-3">
+	          <label for="businessPrice">Business Class Price</label>
+	          <input type="number" class="form-control" id="businessPrice" name="businessPrice" required>
+	        </div>
+	        <div class="col-md-3 mb-3">
+	          <label for="economyPrice">Economy Class price</label>
+	          <input type="number" class="form-control" id="economyPrice" name="economyPrice" required>
+	        </div>
+	      </div>
 	
 	      <hr class="mb-4">
 	

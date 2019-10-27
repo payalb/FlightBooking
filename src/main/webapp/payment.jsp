@@ -57,7 +57,11 @@
 							</tbody>
 						</table>
 					</div>
+
 					<c:set var="paymentAmount" value="${paymentAmount}" scope="session"/>
+					<c:set var="totalpayment" value="${param.total }" scope="session"/>
+					
+					your total amount will be: ${param.total}</br>
 					<a href="payment">Make Payment!</a>
 				</c:if>
 			</div>

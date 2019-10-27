@@ -8,13 +8,85 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.dto.Flight;
+import com.dto.Price;
 import com.exception.DatabaseException;
 import com.exception.FileException;
 import com.util.DatabaseUtil;
 
 public class FlightDaoImpl implements FlightDao {
+	
+	@Override
+	public float[] getPrice(int flightId) throws FileException, DatabaseException {
+		float[] prices = new float[3];
+		
+		String getfirst = "SELECT first_price FROM flight WHERE flight_id=?;";
+		String getbusiness = "SELECT business_price FROM flight WHERE flight_id=?;";
+		String geteconomy = "SELECT economy_price FROM flight WHERE flight_id=?;";
+		
+		try (Connection conn = DatabaseUtil.getConnection(); 
+				PreparedStatement pfirst = conn.prepareStatement(getfirst);
+				PreparedStatement pbusiness = conn.prepareStatement(getbusiness);
+				PreparedStatement peconomy = conn.prepareStatement(geteconomy);
+				//PreparedStatement ps1 = conn.prepareStatement("select currval('flight_seq') as id ");
+				) {
+			pfirst.setInt(1, flightId);
+			pbusiness.setInt(1, flightId);
+			peconomy.setInt(1, flightId);
+			
+			ResultSet first = pfirst.executeQuery();
+			ResultSet business = pbusiness.executeQuery();
+			ResultSet economy = peconomy.executeQuery();
+			
+			if(first.next()) {
+				//prices[0]=first.getFloat("fprice");
+				prices[0]=first.getFloat(1);
+			}
+			if(business.next()) {
+				//prices[1] =business.getFloat("bprice");
+				prices[1]=business.getFloat(1);
+			}
+			if(economy.next()) {
+				//prices[2] = economy.getFloat("eprice");
+				prices[2]=economy.getFloat(1);
+			}
+			
+			
+		}catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Unable to insert flight information: " + e.getMessage());
+		}
+		
+		
+		return prices;
+	}
+	
+	@Override
+	public void setPrice(Price price) throws FileException, DatabaseException {
+		String sql = "UPDATE flight SET first_price = ?, business_price = ?, economy_price = ? WHERE flight_id=?;";
+		try (Connection conn = DatabaseUtil.getConnection(); PreparedStatement ps = conn.prepareStatement(sql);
+				//PreparedStatement ps1 = conn.prepareStatement("select currval('flight_seq') as id ");
+				) {
+			ps.setFloat(1, price.getFirstPrice());
+			ps.setFloat(2, price.getBusinessPrice());
+			ps.setFloat(3, price.getEconomyPrice());
+			ps.setInt(4, price.getFlight_id());
+			
+			int row = ps.executeUpdate();
+			if (row == 0) {
+				throw new DatabaseException("Unable to insert flight information.");
+			} else {
+				
+			}	
+			conn.commit();
+		}catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Unable to insert flight information: " + e.getMessage());
+		}
+		
+	}
 
 	@Override
 	public int addFlight(Flight flight) throws FileException, DatabaseException {

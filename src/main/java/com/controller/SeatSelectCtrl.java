@@ -154,7 +154,9 @@ public class SeatSelectCtrl extends HttpServlet {
 				if (row <= 0) {
 					// throw new DatabaseException("Cannot update flight seat information.");
 				}
-
+				float total = Float.parseFloat(request.getParameter("total"));
+				//session.setAttribute("total", total);
+				//request.setAttribute("total", total);
 				session.setAttribute("bookingList", bookings);
 				request.getRequestDispatcher("/payment.jsp").forward(request, response);
 			}

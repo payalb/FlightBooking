@@ -102,7 +102,7 @@ width:300px;
 	</div>
 	<!--  <input type="hidden" name="title" value"title_value">-->
 	<form action="seating"  method="post">
-	
+	<input type ="hidden" name="total" id ="totalprice" value="${total}">
 	<input type="hidden" name="seats" id="picked" value="">
 	<button  class="btn btn-primary btn-lg " id="bookBtn" type="submit">Submit</button>
 	</form>

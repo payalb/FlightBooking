@@ -57,7 +57,7 @@ public class PaymentCtrl extends HttpServlet {
 		for(Booking booking : bookingList) {
 			Payment payment = new Payment();
 			payment.setBooking(booking);
-			payment.setPaymentAmount((Long)session.getAttribute("paymentAmount"));
+			payment.setPaymentAmount(Double.parseDouble((String)session.getAttribute("totalpayment")));
 			payment.setPaymentTime(LocalDateTime.now());			
 			try {
 				if (booking == null || payment.getPaymentAmount() <=0) {

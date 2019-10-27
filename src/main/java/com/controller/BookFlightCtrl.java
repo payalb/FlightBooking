@@ -31,7 +31,8 @@ import com.exception.DatabaseException;
 import com.exception.FileException;
 import com.exception.InputException;
 import com.util.FormatUtil;
-
+import com.dao.FlightDaoImpl;
+import com.dao.FlightDao;
 @WebServlet("/booking")
 public class BookFlightCtrl extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -74,6 +75,17 @@ public class BookFlightCtrl extends HttpServlet {
 		int[] tickets=new int[3];
 		int[] ticketsLeftVersion=new int[5];
 		ArrayList<ArrayList<String>> layout=new ArrayList<>();
+		//
+		//kael's change
+		//
+		float total=0f;
+		float[] prices = new float[3];
+		try {
+			prices = flightDao.getPrice(flightId);
+		} catch (FileException | DatabaseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		
 		///e  first business economy
@@ -101,6 +113,7 @@ public class BookFlightCtrl extends HttpServlet {
 				Booking booking = new Booking(passengerId, flightId,"",
 						busiBaggage, FlightClass.BUSINESSCLASS, BookingStatus.RESERVED);
 				//businessLeft--;
+				total+=prices[1];
 				tickets[1]++;       ///e
 				int bookingId = bookingDao.BookingFlight(booking);
 				if (bookingId <= 0) {
@@ -119,7 +132,8 @@ public class BookFlightCtrl extends HttpServlet {
 				///m
 				Booking booking = new Booking(passengerId, flightId,"",
 						firstBaggage, FlightClass.FIRSTCLASS, BookingStatus.RESERVED);
-				//firstLeft--;   
+				//firstLeft--;
+				total+=prices[0];
 				tickets[0]++; ///e
 				int bookingId = bookingDao.BookingFlight(booking);
 				if (bookingId <= 0) {
@@ -136,6 +150,7 @@ public class BookFlightCtrl extends HttpServlet {
 				Booking booking = new Booking(passengerId, flightId, "",
 						econoBaggage, FlightClass.ECONOMYCLASS, BookingStatus.RESERVED);
 				//economyLeft--;
+				total+=prices[2];
 				tickets[2]++;
 				 ///e
 				int bookingId = bookingDao.BookingFlight(booking);
@@ -168,6 +183,7 @@ public class BookFlightCtrl extends HttpServlet {
 			//System.out.println(availableSeat.size());
 			request.setAttribute("availableSeat", availableSeat);
 			//System.out.println(bookings.size());
+			request.setAttribute("total", total);
 			request.getRequestDispatcher("/select_seat.jsp").forward(request, response);
 			//e
 			//response.sendRedirect(request.getContextPath() + "/passenger-history");
