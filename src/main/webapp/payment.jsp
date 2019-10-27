@@ -61,8 +61,8 @@
 					<c:set var="paymentAmount" value="${paymentAmount}" scope="session"/>
 					<c:set var="totalpayment" value="${param.total }" scope="session"/>
 					
-					your total amount will be: ${param.total}</br>
-					<a href="payment">Make Payment!</a>
+					your total amount will be: $  ${param.total}</br>
+					<a href="payment" class="btn btn-success btn-block" >Make Payment!</a>
 				</c:if>
 			</div>
 		</div>

@@ -25,7 +25,7 @@ public class EnumUtil {
 		}
 		return gender;
 	}
-	
+
 	public static BookingStatus stringToBookingStatus(String str) {
 		str = str.trim();
 		if (str == null || "".equals(str)) {
@@ -40,14 +40,14 @@ public class EnumUtil {
 			case "RESERVED":
 				status = BookingStatus.RESERVED;
 				break;
-				
+
 			case "CANCELLED":
 				status = BookingStatus.CANCELLED;
 				break;
 		}
 		return status;
 	}
-	
+
 	public static FlightClass stringToFlightClass(String str) {
 		str = str.trim();
 		if (str == null || "".equals(str)) {
@@ -62,14 +62,14 @@ public class EnumUtil {
 			case "FIRSTCLASS":
 				flightClass = FlightClass.FIRSTCLASS;
 				break;
-				
+
 			case "BUSINESSCLASS":
 				flightClass = FlightClass.BUSINESSCLASS;
 				break;
 		}
 		return flightClass;
 	}
-	
+
 	public static SeatStatus stringToSeatStatus(String str) {
 		str = str.trim();
 		if (str == null || "".equals(str)) {
@@ -81,13 +81,13 @@ public class EnumUtil {
 				status = SeatStatus.AVAILABLE;
 				break;
 
-			case "INAVAILABLE":
+			case "UNAVAILABLE":
 				status = SeatStatus.UNAVAILABLE;
-				break;				
+				break;
 		}
 		return status;
 	}
-	
+
 	public static SeatLocation stringToSeatLocation(String str) {
 		str = str.trim();
 		if (str == null || "".equals(str)) {

@@ -19,7 +19,7 @@ public class PaymentDaoImpl implements PaymentDao {
 
 	BookingDao bookingDao = new BookingDaoImpl();
 	@Override
-	public int addPayment(Payment p) throws SQLException, DatabaseException, FileException, InputException {
+	public int addPayment(Payment p) throws DatabaseException, FileException, InputException {
 		int paymentId = -1;
 		ResultSet set = null;
 		//BookingDao bookingDao = new BookingDaoImpl();
@@ -73,10 +73,10 @@ public class PaymentDaoImpl implements PaymentDao {
 			while (set.next()) {
 				payment = new Payment();
 				payment.setPaymentId(paymentId);
-				payment.setBooking(bookingDao.getBookingById(set.getInt("booking_id"))); 
+				payment.setBooking(bookingDao.getBookingById(set.getInt("booking_id")));
 				payment.setPaymentAmount(set.getDouble("price"));
 				payment.setPaymentTime(set.getTimestamp("payment_time").toLocalDateTime());
-						
+
 			}
 			if (set != null)
 				set.close();
@@ -85,7 +85,7 @@ public class PaymentDaoImpl implements PaymentDao {
 		}
 		return payment;
 	}
-	
+
 
 	@Override
 	public List<Payment> getPaymentsByPassengerId(int passengerId) {

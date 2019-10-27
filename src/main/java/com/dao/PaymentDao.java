@@ -10,13 +10,13 @@ import com.exception.InputException;
 
 public interface PaymentDao {
 
-	public int addPayment(Payment p) throws SQLException, DatabaseException, FileException, InputException;
-	
+	public int addPayment(Payment p) throws DatabaseException, FileException, InputException;
+
 	public Payment getPaymentById(int paymentId) throws DatabaseException, FileException;
-	
+
 	public List<Payment> getPaymentsByPassengerId(int passengerId);
-	
+
 	public int updatePayment(Payment p);
-	
+
 	public int deletePayment(int paymentId);
 }

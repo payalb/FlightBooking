@@ -28,7 +28,7 @@ import com.exception.InputException;
 public class PaymentCtrl extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	PaymentDao paymentDao = new PaymentDaoImpl();
-     
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		doPost(request, response);
@@ -38,16 +38,17 @@ public class PaymentCtrl extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		HttpSession session = request.getSession(false);
 		//System.out.println(request.getSession(true)==null);
 		//session.setAttribute("a", "somevalue");
 		if (session == null || session.getAttribute("bookingList") == null) {
 			//System.out.println("Null Booking List");
 			response.sendRedirect("/FlightBooking");
-		}else {
-		
-		List<Booking> bookingList = (List<Booking>)session.getAttribute("bookingList");	
+			return;
+		}
+
+		List<Booking> bookingList = (List<Booking>)session.getAttribute("bookingList");
 //		if(bookingList==null)
 //		{
 //			//System.out.println("Null Booking List");
@@ -58,7 +59,7 @@ public class PaymentCtrl extends HttpServlet {
 			Payment payment = new Payment();
 			payment.setBooking(booking);
 			payment.setPaymentAmount(Double.parseDouble((String)session.getAttribute("totalpayment")));
-			payment.setPaymentTime(LocalDateTime.now());			
+			payment.setPaymentTime(LocalDateTime.now());
 			try {
 				if (booking == null || payment.getPaymentAmount() <=0) {
 					//System.out.println("payment = "+ payment.getPaymentAmount());
@@ -70,21 +71,17 @@ public class PaymentCtrl extends HttpServlet {
 					//System.out.println("checkpoint 2");
 					payment.setPaymentId(paymentId);
 				}
-				
-				
-			}catch(InputException | DatabaseException | FileException | SQLException e) {
+			}catch(InputException | DatabaseException | FileException e) {
 				//throw new InputException("Invalid input information during making payment.");
 				if(session.getAttribute("bookingList") != null) {
 					session.removeAttribute("bookingList");
 					session.invalidate();
-				}	
+				}
 				response.sendRedirect(request.getContextPath() + "/error?exception=" );//+ e.getMessage());
 			}
 		}
-		
-		response.sendRedirect("/FlightBooking" + "/passenger-history");
-		}
+		request.setAttribute("message", "Submit payment success!");
+		request.getRequestDispatcher("/passenger-history").forward(request, response);
 	}
 
 }
-

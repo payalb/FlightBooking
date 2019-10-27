@@ -162,7 +162,14 @@ public class SeatSelectCtrl extends HttpServlet {
 			}
 		} catch (InputException | DatabaseException | FileException e) {
 			e.printStackTrace();
-
+			for(Booking b:bookings) {
+				try {
+					bookingDao.deleteBooking(b);
+				} catch (InputException | DatabaseException | FileException e2) {
+					e2.printStackTrace();
+					response.sendRedirect(request.getContextPath() + "/error?exception=" + e.getMessage());
+				}
+			}
 			response.sendRedirect(request.getContextPath() + "/error?exception=" + e.getMessage());
 		}
 

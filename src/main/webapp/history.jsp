@@ -26,6 +26,12 @@
 		<div class="card-body">
 			<div class="table-responsive">
 				<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+				    <% if(request.getAttribute("message") != null) {%>
+                        <div class="alert alert-success" role="alert">
+                                ${message}
+                        </div>
+                    <%			request.setAttribute("message", null);
+                       } %>
 					<thead>
 						<tr>
 							<th>Booking ID</th>
@@ -55,7 +61,7 @@
 								<td>${history.key.getPrice() }</td>
 							</tr>
 						</c:forEach>
-						<c:if test="${bookingHistory==null}">
+						<c:if test="${bookingHistory==null || bookingHistory.size() == 0}">
 							<div class="alert alert-warning" role="alert">
 								Have not found matched records.
 							</div>
