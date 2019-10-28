@@ -12,10 +12,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.dao.FlightDao;
+import com.dao.FlightDaoImpl;
 import com.dao.PaymentDao;
 import com.dao.PaymentDaoImpl;
 import com.dto.Booking;
 import com.dto.BookingStatus;
+import com.dto.FlightClass;
 import com.dto.Payment;
 import com.exception.DatabaseException;
 import com.exception.FileException;
@@ -37,7 +40,7 @@ public class PaymentCtrl extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 
 		HttpSession session = request.getSession(false);
 		//System.out.println(request.getSession(true)==null);
@@ -55,10 +58,36 @@ public class PaymentCtrl extends HttpServlet {
 //			response.sendRedirect("/FlightBooking");
 //		}
 		//System.out.println(bookingList.size());
+		FlightDao flightDao = new FlightDaoImpl();
 		for(Booking booking : bookingList) {
 			Payment payment = new Payment();
 			payment.setBooking(booking);
-			payment.setPaymentAmount(Double.parseDouble((String)session.getAttribute("totalpayment")));
+			//to set up the correct amount
+			int flightId = booking.getFlightId();
+			FlightClass flightClass = booking.getFlightClass();
+			float[] prices = new float[3];
+			float amount = 0f;
+			try {
+				prices = flightDao.getPrice(flightId);
+			} catch (FileException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (DatabaseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			if(flightClass==FlightClass.FIRSTCLASS) {
+				amount = prices[0];
+			}
+			if(flightClass==FlightClass.BUSINESSCLASS) {
+				amount = prices[1];
+			}
+			if(flightClass==FlightClass.ECONOMYCLASS) {
+				amount=prices[2];
+			}
+			payment.setPaymentAmount((double)amount);
+			//finished setting up the correct amount
+			//payment.setPaymentAmount(Double.parseDouble((String)session.getAttribute("totalpayment")));
 			payment.setPaymentTime(LocalDateTime.now());
 			try {
 				if (booking == null || payment.getPaymentAmount() <=0) {
